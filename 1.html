@@ -1,0 +1,21 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>출력결과</title>
+    </head>
+    <body>
+        <script>
+            //세 수 중 최솟값
+            function solution(a, b, c){
+                let answer;
+                if(a<b) answer = a;
+                else answer = b; //a와b 중 최솟값을 먼저 판별하고
+                if(c<answer) answer=c; //그 값과 c값을 비교한다
+                
+                return answer;
+            }
+
+            console.log(solution(2, 5, 1));
+        </script>
+    </body>
+</html>
