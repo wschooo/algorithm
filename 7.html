@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //10부제
+        function solution(day, arr){ //day에는 날짜의 일의 자리 숫자만 오니까 0~9만 옴
+            let answer = 0; // 위반차량의 대수를 구하는 것이므로 answer값을 0으로 초기화
+            for(let i of arr){ // for of 반복문으로 배열 탐색
+                if( i % 10 === day){  // 차 번호의 뒷자리 두개를 10으로 나눴을 때 나머지 == 차 번호의 일의자리 숫자(가장 뒷자리 수), if 차 번호의 일의자리 숫자 = day의 일의자리 숫자 ==> 10부제 위반차량
+                    answer = answer + 1; // 혹은 answer++
+                }
+            }
+            return answer;
+            }
+            
+            arr=[25, 23, 11, 47, 53, 17, 33];
+            console.log(solution(7, arr));
+
+            /* if(i % 10 === day)를 
+               if((i - day) % 10 == 0)으로 써도 될 것 같다.
+               차 번호의 뒷자리 두개에서 날짜의 일의자리를 빼면 10의 배수가 나옴 == 즉, 차 번호의 가장 뒷자리 수(일의자리)가 날짜의 일의자리와 같다 == 10부제 위반차량
+               
+               결국 차량번호의 가장 마지막 자리 == 날짜의 일의자리 ,즉 10부제 위반 조건을 만드는 것
+               */
+    </script>
+</body>
+</html>
