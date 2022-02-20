@@ -1,0 +1,25 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>출력결과</title>
+    </head>
+    <body>
+        <script>
+            //삼각형 판별하기(가장 긴 변의 길이 보다 나머지 두 변의 길이의 합이 커야한다)
+            function solution(a, b, c){
+                let answer = "YES", max;
+                let sum = a + b + c;
+                if(a > b) max = a;
+                else max = b;
+                if(c > max) max = c;
+                
+                if((sum - max)<=max) answer = "NO";
+                
+
+                return answer;
+            }
+
+            console.log(solution(6, 7, 11));
+        </script>
+    </body>
+</html>
