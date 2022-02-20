@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //중복문자제거
+        /*내풀이
+        function solution(s){  
+            let answer
+            for(let i of s){
+                if(i === i.ind/)
+            }
+            return answer;
+        }
+        console.log(solution("ksekkset"));
+        */
+        //무엇을 활용하여 문자열 중 중복을 제거할 것인가?
+
+        /* indexOf를 활용한 해설 코드
+        function solution(s){  
+                let answer="";
+                //console.log(s.indexOf("K")); // indexOf("k", j)와 같이도 쓸 수 있음. "k"라는 문자의 인덱스를 j인덱스 부터(포함)찾아라. 생략하면 j = 0 0번째 인덱스 즉, 처음부터 찾게 되는 거임
+                for(let i=0; i<s.length; i++){
+                    //console.log(s[i], i, s.indexOf(s[i]));
+                    if(s.indexOf(s[i])===i) answer+=s[i]; // s[i](인덱스 요소)의 인덱스 번호가 i(원래 인덱스 번호)랑 같으면 ==> 즉 해당 단어가 최초로 등장했을 때를 의미. 나중에 이해안가면 바로 위 주석코드 실행해보기.
+                }
+                return answer;
+            }
+            console.log(solution("ksekkset"));
+            */
+            
+            /*위 코드를 for of로 쓰지 않은 이유
+            function solution(s){  
+                let answer="";
+                for(let i of s){
+                    if(s.indexOf(i) === ){ // s에서 문자열요소 i의 위치를 꺼내오긴 했지만, 조건문에 비교대상(원래 인덱스 번호)을 지정할 수 없음
+                        answer+=i;
+                    }
+                }
+                return answer;
+            }
+            console.log(solution("ksekkset"));
+            */
+
+            //for of를 사용하려면
+            function solution(s){  
+                let answer="";
+                for(let i of s){
+                    if(answer.indexOf(i) === -1){ //""상태인 answer에서 문자열요소 i의 위치를 찾을 때 -1과 같으면 => answer는 공백이라 당연하게도 s의 문자열요소 i위 위치를 찾으면 -1(존재하지않음)이 나옴. 
+                        answer+=i;  //때문에 answer에 i를 넣어주면 중복이 아닌 최초의 문자열요소 i값들만 들어가게 되는거임. 중복일 때는 조건 answer.indexOf(i) === -1이 아니니까 
+                    }
+                }
+                return answer;
+            }
+            console.log(solution("ksekkset"));
+            
+    </script>
+</body>
+</html>
