@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+    //문자찾기
+    /*내풀이   
+    function solution(s, t){
+        let answer = 0;
+        for(let i of s){
+            if(i === t){
+                answer += 1;
+            }
+        }
+
+        return answer;
+    }
+    
+    let str="INXIFXNFFXIEXIFFX";
+    console.log(solution(str, 'X'));
+    */
+
+    //해설코드
+    /* .split사용하기 
+
+    function solution(s, t){
+        let answer = s.split(t).length;//문자열이 몇 개인지 구해주고
+        return answer-1;//문자열 개수는 구분자보다 1개 더 많으므로 -1개를 해줘야 구분자의 개수가 도출
+    }
+    
+    let str="INXIFXNFFXIEXIFFX";
+    console.log(solution(str, 'X'));
+    */
+
+
+    /* .split(구분자)를 사용하였을 때
+    function solution(s, t){
+        let answer = s.split(t);
+        return answer; //answer는 ["IN","IF","NFF","IE","IFF",""]가 나오고 문자열의 가장 끝에 구분자가 생기면 그 다음에 공백이 하나 더 만들어짐. 
+        //따라서 문자열을 구분자로 나눴을 때 구분자의 개수 + 1개 만큼 문자열이 생성되는건 변함없음
+    }
+    
+    let str="INXIFXNFFXIEXIFFX";
+    console.log(solution(str, 'X'));
+    */
+</script>
+</body>
+</html>
