@@ -1,0 +1,31 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>출력결과</title>
+    </head>
+    <body>
+        <script>
+            //연필개수
+            /*내 풀이
+            function solution(n){
+                let answer = ((n / 12) + 1);
+                
+                return answer;
+            }
+
+            console.log(solution(178));
+            //나머지가 포함된 답이 반환되는 문제
+            */
+
+            //해설코드
+            function solution(n){
+                let answer = Math.ceil(n/12); //소수점 이하를 올림처리
+                
+                return answer;
+            }
+
+            console.log(solution(178));
+            //
+        </script>
+    </body>
+</html>
