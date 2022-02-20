@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //가운데 문자 출력
+        /*내풀이
+    function solution(s){  
+        let answer = ""
+        for(let i of s){
+            if(i.length % 2 == 1){
+                answer = i 
+            }
+        }
+        return answer;
+    }
+    console.log(solution("study"));
+    //접근 자체가 잘못된 것 같다
+    */
+
+
+    //해설코드
+    function solution(s){  
+        let answer;
+        let mid = Math.floor(s.length/2); //floor는 내림. 예를 들어, 2.9도 내림해서 2를 반환함. 따라서 나머지를 떼고 몫만 반환한다고 생각해도 됨. Math.length에서 Math가 아닌 math로 썼더니 오류남. 대문자 꼭 유의
+        if( s.length % 2 == 1){ 
+            answer = s.substring(mid, mid+1); //subString(i,j) ==> i번 인덱스(포함)부터 j번 인덱스 까지(j번 인덱스 미포함) 문자열 타입 출력
+        }                                     //substr(i,j) ==> i번째 인덱스(포함)부터 'j개'를 문자열로 출력  
+        else { answer = s.substring(mid-1, mid+1)}
+        return answer;
+    }
+    console.log(solution("studdddy"));
+    </script>
+</body>
+</html>
