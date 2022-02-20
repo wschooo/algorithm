@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //대문자 찾기
+        //내풀이
+            function solution(s){         
+                let answer = 0;
+                for( let i of s){
+                    if( i === i.toUpperCase()){
+                        answer++;
+                    }
+                }
+                return answer;
+            }
+            
+            let str="KorEATimeGood";
+            console.log(solution(str));
+            
+            /*해설코드
+            //아스키코드(넘버) 활용(대문자의 아스키넘버 = 65 ~ 90(26개), 소문자의 아스키넘버 = 97 ~ 122(26개))
+            function solution(s){         
+                let answer = 0;
+                for( let i of s){
+                   //let askNum = i.charCodeAt();
+                   //if(askNum >=65 && askNum <=90){
+                   //answer++
+                   //    } 혹은 
+                   if( i.charCodeAt() >=65 && i.charCodeAt() <= 90){
+                       answer++;
+                   }
+                }
+                    
+                return answer;
+            }
+
+            let str="KorEATimeGood";
+            console.log(solution(str));
+            */
+    </script>
+</body>
+</html>
