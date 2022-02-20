@@ -1,0 +1,74 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>출력결과</title>
+    </head>
+    <body>
+        <script>
+                //홀수
+                /*내풀이
+               function solution(arr){
+                let answer = [];
+                let i = 0;
+                for(let i = 0; i < arr.length; i++){
+                    if (arr[i] % 2 !== 0){
+                    arr[i] = arr[i] + arr[i+1]; 
+                    }
+                    else {
+                    continue;
+                    }
+                    
+                }
+                answer.push(arr[i]);
+                return answer;
+                }
+            
+            arr=[12, 77, 38, 41, 53, 92, 85];
+            console.log(solution(arr));
+                */
+                
+    
+            /*해설코드
+            function solution(arr){
+                let answer=[];
+                let sum=0, min=Number.MAX_SAFE_INTEGER; //홀수들의 합과, 홀수 중 최솟값을 출력하기 위해 변수를 2개 지정
+                for(let x of arr){//배열탐색
+                    if(x%2===1){//홀수선별
+                        sum+=x;//합 누적
+                        if(x<min) min=x;//min의 초기값이 MAX_SAFE_INTEGER이므로 최초의 홀수가 최솟값이 됨
+                    }
+                }
+                answer.push(sum);
+                answer.push(min);     
+                return answer;
+            }
+            
+            arr=[12, 77, 38, 41, 53, 92, 85];
+            console.log(solution(arr));
+            */
+
+            //재풀이
+                function solution(arr){
+                let answer = [];
+                let sum = 0;
+                let min = Number.MAX_SAFE_INTEGER;
+                for( let i of arr){
+                    if(i % 2 === 1){
+                        sum += i;
+                    }
+                    if(i < min){
+                        min = i
+                    }
+                }
+                answer.push(sum);
+                answer.push(min);
+                return answer;
+            }
+            
+            
+            arr=[12, 77, 38, 41, 53, 92, 85];
+            console.log(solution(arr));
+            
+        </script>
+    </body>
+</html>
