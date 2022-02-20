@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //큰 수 출력하기
+        /* 내풀이
+        function solution(a){         
+                let answer = [a[0]];
+                for(let i = 1; i < a.length; i++){
+                    if(a[i] > a[i-1]){
+                        answer.push(a[i]);
+                    }
+                }
+                return answer;
+            }
+
+            let arr=[9, 3, 14, 16, 14, 29, 44, 23, 55];
+            console.log(solution(arr));
+            */
+
+            //해설코드
+            function solution(a){         
+                let answer = []; 
+                answer.push(a[0]);  
+                for(let i = 1; i < a.length; i++){
+                    if(a[i] > a[i-1]){
+                        answer.push(a[i]);
+                    }
+                }
+                return answer;
+            }
+
+            let arr=[9, 3, 14, 16, 14, 29, 44, 23, 55];
+            console.log(solution(arr));
+    </script>
+</body>
+</html>
