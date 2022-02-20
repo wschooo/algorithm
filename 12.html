@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+            //대문자로 통일
+            /*내풀이
+            function solution(s){         
+            let answer = "";
+            for(let i of s){
+                if(i === i.toUpperCase()){
+                    answer == answer.push(i.toUpperCase());
+                }
+                else if( i === i.toLowerCase()){
+                    answer == answer.push(i.toUpperCase());
+                }
+            }
+            return answer;
+
+            }
+
+            let str="ItisTimeToStudy";
+            console.log(solution(str));
+            */
+
+             /*수정한 코드
+             function solution(s){         
+                    let answer = "";
+                    for(let i of s){
+                        if(i === i.toLowerCase()){
+                            answer = answer + i.toUpperCase(); // answer 출력값이 배열이 아닌데 .push를 왜 사용?
+                        }
+                        else {
+                            answer = answer + i;
+                        }
+                    }
+                return answer;
+
+            }
+
+            let str="ItisTimeToStudy";
+            console.log(solution(str));
+            */
+            
+            //아스키 코드 활용해보기
+            function solution(s){         
+                    let answer = "";
+                    for(let i of s){
+                        let askNum = i.charCodeAt();
+                        if( askNum >= 97 && askNum <= 122){
+                            answer = answer + i.toUpperCase(); // 혹은 대문자의 아스키 코드의 시작번호는 65, 소문자의 시작번호는 97임을 이용하면 똑같은 문자(a,b,c...x,y,z) 대문자 <-> 소문자의 아스키 넘버의 차이는 항상 32임을 알 수 있다
+                        }                                      // 따라서 answer = answer + String.fromCharCode(askNum - 32);라는 코도드 가능 => 아스키 넘버로 넘어온 숫자를 String을 사용해 문자열로 전환
+                        else{
+                            answer = answer + i;
+                        }
+                    }
+                return answer;
+
+            }
+
+            let str="ItisTimeToStudy";
+            console.log(solution(str));
+            
+
+            /*한방에 변환
+            function solution(s){
+                    let answer = s.toUpperCase();
+                return answer;
+
+            }
+
+            let str="ItisTimeToStudy";
+            console.log(solution(str));
+            */
+    </script>
+</body>
+</html>
