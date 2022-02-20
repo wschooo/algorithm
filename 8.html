@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //일곱 난쟁이
+        //해설코드
+        function solution(arr){
+                let answer = arr;
+                let sum = arr.reduce((a,b) => a+b, 0);
+                for(let i=0; i<arr.length-1; i++){
+                    for(let j=i+1; j<arr.length; j++){
+                        if(sum - (arr[i]+arr[j]) === 100){
+                            arr.splice(i,1);
+                            arr.splice(j-1,1);
+                        }
+                    }
+                }
+                return answer;
+            }
+            
+            
+        
+        
+        let arr=[20, 7, 23, 19, 10, 15, 25, 8, 13];
+        console.log(solution(arr));
+        
+
+
+        /*재풀이
+        function solution(arr){
+            let answer = arr;
+            let sum = arr.reduce((a,b) => a + b, 0);
+            for(let i = 0; i < arr.length-1; i++){
+                for( let j = i + 1; j < arr.length; j++){
+                    if(sum - (arr[i] + arr[j]) === 100){
+                        arr.splice(i,1); 
+                        arr.splice(j-1,1); // 윗줄의 코드에서 .splice를 사용했으므로arr[i]가 빠져 전체적인 배열의 길이가 1개만큼 작아짐. 따라서 arr.splice(j-1,1)이 돼야함.
+                    }
+                }
+            }
+                return answer;
+            }
+            
+            
+        
+        
+        let arr=[20, 7, 23, 19, 10, 15, 25, 8, 13];
+        console.log(solution(arr));
+        */
+    </script>
+</body>
+</html>
