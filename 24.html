@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<script>
+    //봉우리
+    /*해설코드(문제 접근이 어려워 해설을 먼저 들어봄)
+    function solution(arr){  
+                let answer=0;
+                let n=arr.length;
+                let dx=[-1, 0, 1, 0];
+                let dy=[0, 1, 0, -1];
+                for(let i=0; i<n; i++){
+                    for(let j=0; j<n; j++){
+                        let flag=1;
+                        for(let k=0; k<4; k++){
+                            let nx=i+dx[k];
+                            let ny=j+dy[k];
+                            if(nx>=0 && nx<n && ny>=0 && ny<n && arr[nx][ny]>=arr[i][j]){
+                                flag=0;
+                                break;
+                            }
+                        }
+                        if(flag) answer++;
+                    }
+                }  
+                  
+                return answer;
+            }
+
+            let arr=[[5, 3, 7, 2, 3], 
+                     [3, 7, 1, 6, 1],
+                     [7, 2, 5, 3, 4],
+                     [4, 3, 6, 4, 1],
+                     [8, 7, 3, 5, 2]];
+            console.log(solution(arr));
+            */
+
+
+
+    /*내풀이
+    function solution(a){
+            answer = 0;
+            //a.length를 줄이기 위한 변수 작성
+            let lng = a.length;
+            //상,하,좌,우 이동을 위한 배열 생성
+            let iMove = [-1, 1, 0 ,0]
+            let jMove = [0, 0, -1, 1]
+            // 이차원 배열 탐색을 위한 이중for문 생성
+            for( let i = 0; i < lng; i++){
+                for (let j = 0; j < lng; j++){
+                    //a[i][j]의 상하좌우 움직임 만들기
+                    for( let k = 0; k < 4; k ++){
+                        let ni = i + iMove[k]
+                        let nj = j + jMove[k]
+                        //상,하,좌,우 움직임이 발생할 때 주어진 조건에 만족하는 경우를 카운팅
+                        if(ni >= 0 && 
+                           ni < lng && 
+                           nj >= 0 && 
+                           nj < lng && 
+                           a[i][j] > a[ni][nj]){
+                               answer++;
+                            //answer++;
+                            //원하는 답이 출력이 안됨. 봉우리의 개수가 중복으로 카운팅이 됨(40개)
+                            //상,하,좌,우 움직임을 위한 k반복문이 진행되고 if조건문으로 내려왔을 때 상,하,좌,우 모두 < a[i][j]가 아닌 
+                            //상,하,좌,우의 행렬 중 단 한개라도 < a[i][j]를 만족하면 answer가 카운팅이 돼서 그런 것 같음
+                            //a[i][j]기준으로 arr의 처음부터 끝까지 위의 조건에 해당되는 케이스를 직접 세어보니 40개가 맞음
+                    }
+                }
+            }
+        }
+        return answer;
+    }
+        
+
+            let arr=[[5, 3, 7, 2, 3], 
+                     [3, 7, 1, 6, 1],
+                     [7, 2, 5, 3, 4],
+                     [4, 3, 6, 4, 1],
+                     [8, 7, 3, 5, 2]];
+            console.log(solution(arr));
+            */
+
+            //수정한 풀이
+            function solution(a){
+                answer = 0;
+                let iMove = [-1, 1, 0, 0]
+                let jMove = [0, 0, -1, 1]
+                let lng = a.length;
+                for( let i = 0; i < lng; i++){
+                    for( let j = 0; j < lng; j++){
+                        let flag = 1; // 상,하,좌,우에 위치한 모든 행렬보다 a[i][j]가 큰 상황을 출력하기 위해 상황변수 설정(true)
+                        for( let k = 0; k < 4; k++){
+                            //let flag = 1; //해당 위치에 상황변수 flag가 오면 안되는 이유는 상,하,좌,우로 움직였을 때, 
+                            //a[i][j] <= a[ni][nj]를 만족하기 전에 a[i][j] > a[ni][nj]라면 flag === 1 이되어 answer값에 카운팅 되기 떄문임
+                            //상,하,좌,우에 위치한 모든 행렬을 탐색하기 위해 k에 대한 for반복문이 끝난 위치에서 조건판단을 해야함
+                            let ni = i + iMove[k];
+                            let nj = j + jMove[k];
+                            if( ni >= 0 && //index out of range 방지(-1행 or -1열과 같은 경우)
+                                ni < lng &&
+                                nj >= 0 &&
+                                nj < lng &&
+                                a[i][j] <= a[ni][nj]){ //상,하,좌,우에 위치한 행렬 중 단 하나라도 a[i][j]가 작은 경우
+                                    flag = 0;
+                                    break; // 상,하,좌,우 순서로 비교탐색을 하다 반복이 끝나기 전 주어진 조건이 만족되자마자 반복 중지
+                                }
+                            /*잘못 생각한 풀이
+                            else if (flag === 1){
+                                answer++;
+                            }
+                            //위의 코드에서 실수했던 것과 마찬가지로 반복이 하나하나 돌 때마다 주어진 조건을 만족하면 answer는 중복으로 카운팅 됨
+                            //예를 들어 상,하,좌,우 순으로 탐색이 될 때 상,하 두 행렬이 < a[i][j] 이고 이어서 좌행렬이 a[i][j] <= a[ni][nj]를 만족시킨다면
+                            //상행렬과 비교하고 flag === 1을 만족 answer는 ++, 하행렬과 비교하고 flag === 1을 만족 answer는 ++, 좌행렬과 비교하고 flag === 0, break가 됨
+                            //즉 원래 answer는 카운팅 돼야하지 않지만 2번 카운팅이 됨
+                            //때문에 모든 반복(상,하,좌,우 행렬 탐색 및 비교)이 끝났을 때 반복문 바깥에서 조건문을 세워야 함  
+                            */
+                        }
+                        if(flag) answer++;
+                    }
+                }
+                return answer;
+            }
+
+            let arr=[[5, 3, 7, 2, 3], 
+                     [3, 7, 1, 6, 1],
+                     [7, 2, 5, 3, 4],
+                     [4, 3, 6, 4, 1],
+                     [8, 7, 3, 5, 2]];
+            console.log(solution(arr));
+            
+            
+    
+</script>
+<body>
+</body>
+</html>
