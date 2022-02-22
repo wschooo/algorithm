@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+    //격자판 최대합
+    /*내풀이(접근이 잘 안됨)
+    function solution(a){ 
+        let answer= ""; 
+        for(let i = 0; i < a.length; i++){
+            answer+=a[i];
+        }
+        return answer;
+    }
+
+    let arr=[[10, 13, 10, 12, 15], 
+             [12, 39, 30, 23, 11],
+             [11, 25, 50, 53, 15],
+             [19, 27, 29, 37, 27],
+             [19, 13, 30, 13, 19]];
+    console.log(solution(arr));
+    */
+
+    /*해설 코드(이차원 배열)
+    function solution(a){ 
+        let answer = Number.MIN_SAFE_INTEGER; 
+        let n = a.length;
+        let sum1 = sum2 = 0;
+        for(let i = 0; i < n; i++){
+            sum1 = sum2 = 0;
+            for(let j = 0; j < n; j++){
+                sum1 += a[i][j];
+                sum2 += a[j][i];
+            }
+            answer = Math.max(answer, sum1, sum2); //왜 answer값을 포함해서 비교해야 하는가?
+        }
+        sum1 = sum2 = 0;
+        for(let i = 0; i < n; i++){
+            sum1 += arr[i][i];
+            sum2 += arr[i][n - i - 1];
+        }
+        answer = Math.max(answer, sum1, sum2);
+        return answer;
+    }
+
+    let arr=[[10, 13, 10, 12, 15], 
+             [12, 39, 30, 23, 11],
+             [11, 25, 50, 53, 15],
+             [19, 27, 29, 37, 27],
+             [19, 13, 30, 13, 19]];
+    console.log(solution(arr));
+    */
+    
+    
+    //재풀이
+    function solution(a){ 
+        //행과 열들의 합 비교후 최대값 출력
+        let answer = Number.MIN_SAFE_INTEGER;//최대값 비교를 위해 가장 작은 값으로 초기 answer값 설정
+        for(let i = 0; i < a.length; i++){
+            let colSum = 0; 
+            let rowSum = 0;
+            for(let j = 0; j < a.length; j++){
+                colSum += a[i][j];
+                rowSum += a[j][i];
+            }
+            answer = Math.max(answer, colSum, rowSum);//비교대상에서 answer를 빼버리면 행과 열의 반복을 통한 각각의 합(행과 열의 합)들이 반복문을 빠져나온 후 다시 초기 answer값(MIN_SAFE_INTEGER)으로 초기화 되는 것 같다
+        }                                            //즉, return값은 for 반복문에서 가장 마지막으로 실행되는 4행의 합과, 4열의 합중에서 더 큰 값만 반환하고, 이전에 반복이 돌았던 1~3행과열의 합값은 answer값에 누적되지 않는다
+        //왜 answer값까지 포함해서 비교하면 반복을 통한 행과열의 값이 answer변수에 누적이 되고, answer값을 포함하지 않고 최대값을 비교하면 행과열의 합이 answer변수에 누적되지 않아 가장 마지막 행과열의 합값 중 더 큰 값만 반환하는지???
+        
+        //생각을 잘못함. 최대값 비교에서 answer를 넣던지 answer를 넣지 않던지 answer값엔 새로운 colSum과, rowSum중 더 큰값이 저장 됨.
+        //다만 for반복문이 돌 때 Math.max(colSum,rowSum)만 쓰면 비교대상은 이미 answer에 저장된 이전행과 열의 합값이 빠진채로 새로운 colSum(행의 합), 새로운 rowSum(열의 합)값만 비교하므로 반복문의 가장 마지막인 4행과 4열의 값중 더 큰 값만 반환한다. 
+        //이전행과 열의 합값 중 더 큰 값이 저장된 answer변수를 빼고 비교했으므로 당연히 새로운 행과 열의 합값중 더 큰 값만 반환하는 것
+        
+        //대각선 행과 열의 합 비교후 최대값 출력
+            let diaSum = 0;
+            let rdiaSum = 0;
+        for(let i = 0; i < a.length; i++){
+            diaSum += a[i][i]
+            rdiaSum += a[i][(a.length-1) - i] //행값은 0부터 1씩 증가하며 반복, 열값은 4부터 1씩 감소하며 반복
+        }
+            answer = Math.max(answer, diaSum, rdiaSum);
+            return answer
+    }
+
+    let arr=[[100000, 10, 10, 10, 10], 
+             [10, 10, 10, 1000, 200],
+             [10, 10, 1000, 10, 300],
+             [10, 10, 10, 10, 400],
+             [10, 10, 10, 10, 500]];
+    console.log(solution(arr));
+    
+    </script>
+</body>
+</html>
