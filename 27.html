@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //3.문자열 탐색
+        //숫자만 출력
+        /*내풀이
+        function solution(s){
+                let answer ='';
+                //문자열에서 숫자가 아닌 것을 공백으로
+                let onlyNumber = s.replace(/[^0-9]/g,'');
+
+                //출력확인용
+                //console.log(onlyNumber);
+                //맨 앞에 숫자0이오면 입력조건을 만족시키지 못함
+                //0보다 큰 숫자가 문자열의 가장 앞자리가 되었을 때 주어진 문자열에서 숫자만 출력되도록 만들어야함
+
+                for(let i = 0; i < onlyNumber.length; i++){
+                    if(onlyNumber[i] === 0){
+                        continue;
+                    }
+                    else if(onlyNumber[i] > 0){
+                        answer+=onlyNumber[i];
+                    }
+                }
+                
+                //0보다 큰 숫자가 문자열의 가장 앞자리가 되었을 때 
+                //숫자열을 출력하지만, 이후에 나오는 0은 여전히 생략 됨
+                //반복문 자체가 주어진 문자열에서 0만 제거하기 때문임
+                //문자열을 탐색하며 가장 앞자리 숫자가 0보다 클 때부터 출력을 시작하면서 
+                //이후에 등장하는 0을 계속 포함하면서 출력하는 방법을 찾아야 함  
+                return answer;
+            }
+            
+            let str="g0e0n2T0s8eSoft";
+            console.log(solution(str));
+            */
+
+            //해설코드
+            /*
+            function solution(s){
+                let answer = '';
+                for(let i of s){
+                    if(!isNaN(i)){      //isNaN() -> is Not a Number? -> 숫자가 아닌가? ->아니면 true 숫자면 false
+                        answer += i;
+                    }
+                }
+                return parseInt(answer); //answer값을 정수화 시켜버리면 문자열 앞에 오는 0들을 없앨 수 있음
+            }
+            
+            let str="g0e0n2T0s8eSoft";
+            console.log(solution(str));
+            */
+            
+            //parseInt를 사용하지 않으면
+            function solution(s){
+                let answer = 0;
+                for(let i of s){
+                    if(!isNaN(i)){
+                        answer = answer * 10 + Number(i); //*10으로 자릿수를 하나씩 늘려주면서 + Number(i)를 통해 비어있는 자릿수를 채움
+                    }
+                }
+                return answer;
+            }
+            
+            let str="g0e0n2T0s8eSoft";
+            console.log(solution(str));
+    </script>
+</body>
+</html>
