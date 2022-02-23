@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //3.문자열 탐색
+        //회문 문자열
+        /*내풀이
+        function solution(s){
+                let answer = "YES"
+                for(let i = 0; i < s.length; i++){
+                    if(s[i] !== s[(s.length - 1) - i]){
+                        answer = "NO";
+                    }
+                }
+                return answer;
+            }
+            
+            let str="gsooofsosfooosg";
+            console.log(solution(str));
+            //대소문자를 구분하지 않는다는 입력 조건도 만족시켜야 함
+            */
+
+            /*재풀이
+            function solution(s){
+                let answer = "YES"
+                for(let i = 0; i < s.length; i++){
+                    s[i] = s.toLowerCase(s[i]);
+                }
+                    for(let j = 0; j < s.length; j++)
+                    if(s[j] !== s[(s.length - 1) - j]){
+                        answer = "NO";
+                    }
+                
+                return answer;
+            }
+            
+            let str="gsooofsOsFooosg";
+            console.log(solution(str));
+            */
+
+            /*대문자를 소문자로 출력해보기
+            function solution(s){
+                let answer = '';
+                for(let i = 0; i < s.length; i++){
+                    answer += s.toLowerCase(s[i]);
+                    break; //break를 걸어주지 않으면 왜 반복(s[14]까지 소문자로 변환)이 끝난 이후 
+                    //전체반복도 s.length만큼(gsooofsosfooosg * 15번) 일어나는지 모르겠음
+                }
+                
+                for(let i of s){
+                    answer += s.toLowerCase(s[i]);
+                }
+                return answer;
+            }
+            
+            
+            
+            let str="gsooofsOsFooosg";
+            console.log(solution(str));
+            */
+
+            /*대문자를 소문자로 변환하는 코드 추가
+            function solution(s){
+                let answer = "YES"
+                let lowerCase = ''; //소문자 문자열을 받을 변수 하나를 생성하고
+                for(let i = 0; i < s.length; i++){ 
+                    lowerCase += s.toLowerCase(s[i]); //주어진 문자열 전체를 소문자로 변환
+                    break;
+                }
+                    for(let j = 0; j < s.length; j++) 
+                    if(lowerCase[j] !== lowerCase[(s.length - 1) - j]){
+                        answer = "NO";
+                    }
+                
+                return answer;
+            }
+            
+            let str="gsdOOofsOsFooosg";
+            console.log(solution(str));
+            */
+
+
+            /*최종풀이
+            function solution(s){
+                let answer = "YES"
+                //let lowerCase = ''; //소문자 변환을 두번의 반복을 거쳐서 할 필요가 없을 것 같음
+
+                let sameAlpha = s.toLowerCase()
+                for(let i = 0; i < sameAlpha.length; i++){
+                    if(sameAlpha[i] !== sameAlpha[(sameAlpha.length - 1) - i]){
+                        answer = 'NO';
+                    }
+                }
+                return answer;
+            }
+            
+            let str="gsdOoOofsOsFooOodsg";
+            console.log(solution(str));
+            */
+
+            //해설코드
+            /*직접 비교하는 방법
+            function solution(s){
+                let answer = "YES"
+                s = s.toLowerCase();
+                let len = s.length; // 문자열의 길이
+                for(let i = 0; i < Math.floor(len/2); i++){ //문자열의 끝까지 반복을 할 필요가 없고 중간지점까지만 반복하면 되므로 len/2
+                    if(s[i] !== s[len - 1 -i]){             //문자열이 홀수라면 정가운데에 위치한 문자는 비교할 필요가 없음. 때문에 정가운데 바로 앞에 위치한 문자열까지만 비교하면 되므로
+                        return 'NO';                        //문자열이 짝수일 때와 마찬가지로 비교해주면 되고, 나머지를 뗴고 목만 남기기위해 Math.floor
+                    }
+
+                }  
+                return answer;
+            }
+            
+            let str="gsdOoOofsOsFooOodsg";
+            console.log(solution(str));
+            */
+
+
+            //reverse 메서드를 사용하는 방법
+            function solution(s){
+                let answer = "YES"
+                s = s.toLowerCase();
+                //console.log(s.split('')); //구분점을 찾을 때 사용했던 split. split은 배열화를 시켜주고
+                //console.log(s.split('').reverse()); //배열화가 되어있어야 reverse메서드 사용가능(배열의 순서를 뒤집어 줌)
+                //console.log(s.split('').reverse().join('')); // 그리고 join을 사용하여 배열로 나뉘어있던 문자열을 합쳐줌
+                if(s.split('').reverse().join('') != s){
+                    return 'NO';
+                } 
+                return answer;
+            }
+            
+            let str="gsdOodOofsOsFooOodsg";
+            console.log(solution(str));
+    </script>
+</body>
+</html>
