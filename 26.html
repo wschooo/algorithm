@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //3.문자열 탐색
+        //유효한 팰린드롬
+        /*내풀이
+        
+        function solution(s){
+                let answer = 'YES';
+                //하나의 문자열이라 생각하고 알파벳 이외의 것(숫자, 공백, 특수문자 등)을 제거하는 방법을 알아야할 것 같다
+                // 정규식을 사용하여 특정 문자열을 추출 가능
+                // 공백 제거 s.replace(/\s/g,'');
+                // 특수문자 제거 s.replace(/[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi,'');
+                // console.log(s);
+                // 일일이 제거해야할 부분이 많다. 차라리 해당문자열에서 알파벳만 뽑는 방법을 알아야할 것 같다
+
+                let regex = /[^a-z]/g; // /[a-z]/g 알파벳을 찾음 [^a-z]/g 알파벳이 아닌 것만 찾음
+                let init = s.replace(regex, ''); // 알파벳을 아닌것을 찾아서, ''(공백)으로 바꾼다
+                //console.log(s);
+                let onlyAlpha = init.replace(/\s/g,''); // 공백을 제거한다
+                //console.log(s);
+                return answer;
+                //let lowerCase = '';
+                for(let i = 0; i < onlyAlpha.length; i++){
+                    lowerCase += onlyAlpha.toLowerCase(onlyAlpha[i])
+                    break;
+                }
+                for(let j = 0; j < onlyAlpha.length; j++){
+                    if(lowerCase[j] !== lowerCase[(onlyAlpha.length -1) - j]){
+                        answer = 'NO';
+                    }
+                }
+                return answer;
+            }
+            
+            let str="found7, time: study; Yduts; emit, 7Dnuof";
+            console.log(solution(str));
+            //코드가 너무 지저분하고, 찾은 내용에 대한 적용이 잘못된 것 같다
+            //답도 YES로만 출력 됨
+            */
+            
+            /*처음부터 다시 풀이
+            function solution(s){
+                let answer='YES';
+                //주어진 문자열에서 알파벳이 아닌(^)것을 공백으로
+                //let onlyAlpha = s.replace(/[^a-z]/g,'');
+                //출력 확인용
+                //console.log(onlyAlpha);
+                //대문자가 생략된채 문자열이 출력 됨
+                
+                let onlyAlpha = s.replace(/[^a-z-A-Z]/g,'');
+                //출력 확인용
+                //console.log(onlyAlpha);
+                //대문자가 반환이 안되어 형식에 맞게 A-Z를 추가해봤는데 대문자까지 출력이 잘 됨. 
+                //올바른 표현인지 검증이 필요함
+
+                //알파벳만 출력된 문자열을 동일한 형식으로 통일(소+대문자 -> 소문자로)
+                onlyAlpha = onlyAlpha.toLowerCase();
+                //console.log(onlyAlpha);
+                
+                //입력조건을 만족시키기 위해 반복문을 통한 탐색
+                for(let i = 0; i < onlyAlpha.length; i++){
+                    if(onlyAlpha[i] !== onlyAlpha[(onlyAlpha.length - 1) - i]){
+                        answer = 'NO';
+                    }
+                }
+                return answer;
+            }
+            
+            let str="found7, time: sdtudy; YdutDs; emit, 7Dnuof";
+            console.log(solution(str));
+            */
+
+
+            //해설코드
+            function solution(s){
+                let answer='YES';
+                s = s.toLowerCase().replace(/[^a-z]/g, ''); // 문자열을 소문자로 바꾼 후 replace로 소문자(a-z)가 아닌(^)것들을 글로벌영역에서 찾아서(g) 공백으로 바꿔라(, '')
+                if(s.split('').reverse().join('') !== s){
+                    return 'NO';
+                }
+                return answer;
+            }
+            
+            let str="found7, time: sdtudy; YdutDs; emit, 7Dnuof";
+            console.log(solution(str));
+    </script>
+</body>
+</html>
