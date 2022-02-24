@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //3.문자열 탐색
+        //가장 짧은 문자거리
+        //접근이 어려워서 원리를 먼저 들음
+        /*내풀이
+        function solution(s, t){
+                let answer = '';
+                let rtoL = '';
+                let ltoR = '';
+                let p = 1000; // 첫 문자열의 거리비교를 위한 변수
+                //왼쪽에서 오른쪽으로 기준문자열과의 거리 탐색
+                //기준문자열과 오른쪽으로 얼만큼 떨어져있는가
+                for(let i of s){
+                    if( i === t){
+                        p = 0;
+                    }
+                    else {
+                        p++;
+                    }
+                    rtoL += p;
+                }
+                
+                //오른쪽에서 왼쪽으로 기준문자열과의 거리 탐색
+                //기준문자열과 왼쪽으로 얼만큼 떨어져있는가
+                for(let j of s.split('').reverse().join('')){
+                    if( j === t){
+                        p = 0;
+                    }
+                    else {
+                        p++;
+                    }
+                    ltoR += p;
+                }
+                return answer;
+            }
+            
+            let str="teachermode";
+            console.log(solution(str, 'e'));
+            //각 방향으로 문자열 탐색이 끝난 이후, 각 탐색의 결과를 비교하여
+            //어떻게 더 작은값(기준문자열과 거리가 더 짧은 값)을 answer로 하여 return할 수 있을까?
+            */
+            
+            
+            /*해설코드
+            function solution(s, t){
+                let answer = [];
+                let p = 1000;
+                //왼쪽에서 오른쪽 방향으로 탐색
+                //answer를 배열로 만들어 기준문자열과 오른쪽으로 얼마만큼 떨어져있는지 
+                //먼저 푸시를 해주고(비교대상 생성)
+                for (let i of s){
+                    if(i === t){
+                        p = 0;
+                        answer.push(p);
+                    }
+                    else {
+                        p++;
+                        answer.push(p);
+                    }
+                }
+
+                //오른쪽에서 왼쪽 방향으로 탐색
+                //기준문자열과 왼쪽으로 얼마만큼 떨어져있는지 탐색하면서
+                //여기에서 기준문자열과 거리가 더 짧은 값으로 바로 교체해준다(비교대상을 윗탐색에서 바로 만들어버렸으므로)
+                p = 1000; //p초기화
+                for (let i = s.length -1; i >= 0; i--){
+                    if(s[i] === t){
+                        p = 0;
+                        //answer[i] = 0; //원래 0인것을 굳이 0으로 바꿔줄 필요는 없음
+                    }
+                    else{
+                        p++;
+                        answer[i] = Math.min(answer[i], p);
+                    }
+                }
+                return answer;
+            }
+            let str="teachermode";
+            console.log(solution(str, 'e'));
+            //왜 p라는 변수를 만들어야 하는지, 왜 큰수를 값으로 할당해야하는지 생각해볼 것
+            */
+
+
+            //다시 풀이
+            function solution(s, t){
+                let answer = []; //answer를 왜 빈배열로 만들어야 하는가?
+                //answer를 빈문자열로 만들면 문자열에 기준문자와의 거리가 누적되므로
+                //예를 들어, 101과 102가 누적된다면 answer = 101102...과 같은 형식이 되며
+                //두번째 탐색을 진행하면서 해당 거리를 더 최소 거리로 바꿔줄 때 비교대상을 정확히 매칭시킬 수 없다
+                //101과 1이라는 거리 중 최단거리는 1이되므로 101 -> 1로 바꿔야 하지만
+                //문자열로 받으면 각각의 탐색의 결과의 자릿수가 달라질 수 있기 때문에 101과 1이 서로 비교대상으로 매칭되지 않을 수 있음
+                let p = 100; 
+                // 1. 먼저 p라는 변수를 만든 것은 왼쪽에서 오른쪽 방향으로 문자열탐색을 할 때(왼쪽 기준문자롤 기준으로 얼만큼 떨어졌는가) 
+                // 왼쪽에 기준문자가 없는 경우를 고려했기 때문이다. 
+                // 2. p변수에 임의의 숫자(값)는 왜 큰 수로 할당해야 하는가?
+                // 정확히는 1. 의 경우(왼쪽에 기준문자가 없을 때) 문자열의 길이 보다 최소 같거나 큰 값을 할당한 것이다.
+                // 기준이 되는 문자(t)가 문자열의 한자리를 차지하기 때문에 기준문자와의 최대거리는 문자열의 길이 - 1 값이 되므로
+                // 위의 극단적인 경우까지 고려하면 초기 p값은 문자열의 최대거리와 같아야한다
+                // 해당 문제에서는 주어진 조건을 만족하지 않으면 초기 p값에서 +1씩 카운팅을 하고,
+                // Math.min(같은값, 같은값)을 했을 때 같은값이 반환되는 것을 보아
+                // 초기 p값으로 문자열길이 -2 까지 설정 가능할 것 같다
+                // 결론은 최단거리를 구하는 문제지만 극단적인 경우 '기준문자로 부터 최단거리 = 문자열간 최대거리'가 되는 경우가 있으므로
+                // 문자열간 최대거리와 최소한 같은 값 부터 카운팅을 시작해야
+                // 모든 경우를 포함하여 올바른 최단거리를 출력할 수 있다
+
+                for(let i of s){
+                    if(i === t){
+                        p = 0;
+                        answer.push(p);
+                    }
+                    else{
+                        p++;
+                        answer.push(p);
+                    }
+                }
+
+                p = 100; 
+                for(let i = s.length - 1; i >= 0 ; i--){
+                    if(s[i] === t){
+                        p = 0;
+                    }
+                    else {
+                        p++;
+                        answer[i] = Math.min(answer[i], p);
+                    }
+                }
+                return answer;
+            }
+            let str="teachermode";
+            console.log(solution(str, 'e'));
+    </script>
+</body>
+</html>
