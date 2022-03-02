@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //4.완전탐색
+        //졸업 선물
+        /*내풀이
+        
+        //풀이 전 정리
+        //매개변수 m = 예산
+        //answer는 선물을 받을 수 있는 학생수의 최대값
+        //할인 가능 상품 단 1개
+        //상품 + 배송비가 가장 작은 것들만 더하고
+        //상품 + 배송비가 가장 비싼 것에 할인
+        function solution(m, product){
+                let answer = 0;
+                //상품 + 배송비가 가장 큰 것
+                let maxPrice = 0;
+                for(let i = 0; i < product.length; i++){
+                    let max = Number.MIN_SAFE_INTEGER;
+                    for(let j = 0; j < 1; j++){
+                        if(product[i][j] + product[i][j + 1] > max){
+                            max = product[i][j] + product[i][j + 1];
+                        }
+                    }
+                    maxPrice = Math.max(maxPrice, max);
+                }
+                return maxPrice;
+                // 상품 + 배송비가 가장 작은 것들
+                return answer;
+            }
+            
+            let arr=[[2, 5], [2, 2], [4, 3], [9, 4], [10, 3]];
+            console.log(solution(28, arr));
+            */
+
+            
+            /*재풀이
+            function solution(m, product){
+                let answer = 0;
+                //상품 중 가장 비싼 것
+                //가장 비싼 상품을 할인받는다고해서 그게 매번 최적의 결과를 가져오는가?
+                // -> 상품과 배송비는 각각 다르지만 그 합이 같은 물건이라면 상품가격이 더 큰것에 할인쿠폰을 쓰는 것이 총 가격은 낮아지지만
+                // -> 항상 상품과 배송비는 각각 다르지만 총 합은 같은 경우만 존재하는 것이 아님
+                // -> 만약 상품가격은 100인데 배송비가 1인 물건이 있다면 상품가격이 가장 비싸다고해서 여기에 쿠폰을 써야하는가?
+                // -> 할인 받을 수 있는 금액 자체만 올라가는 것이지 상품가격이 가장 비싼것을 기준으로 할인쿠폰을 적용하는 것은 최적의 결과를 가져오지 않음
+                // -> 선물을 받을 수 있는 최대학생수를 출력해야하기 때문(가격은 상관 없고, 오로지 최대한 많은 학생이 선물을 받게끔 해야함)
+                // 그럼 무엇을 기준으로 할인쿠폰을 적용할 상품을 선택해야 할까?
+                let maxPrice = 0;
+                for(let i = 0; i < product.length; i++){
+                    let max = Number.MIN_SAFE_INTEGER;
+                    for(let j = 0; j < 1; j++){
+                        if(product[i][j] > max){
+                            max = product[i][j];
+                        }
+                    }
+                    maxPrice = Math.max(maxPrice, max);
+                }
+                return maxPrice;
+                // 상품 + 배송비가 가장 작은 것들
+                // 똑같은 배열을 탐색하면서 두가지의 다른 조건을 동시에 만족하는지 어떻게 판단?
+                // 총 가격이 같은 값이 나오면 어떻게 처리??
+                // 배열을 탐색하면서 어떻게 가장 작은 값을 뽑고, 그 다음 작은 값을 뽑고, 이 값들의 합이 <= m이 되면 탐색을 중지하는 코드를 어떻게 작성?
+                return answer;
+            }
+            
+            let arr=[[6, 6], [2, 2], [100, 1], [12, 1], [10, 3]];
+            console.log(solution(28, arr));
+            */
+
+            
+            /*해설코드
+            function solution(m, product){
+                let answer = 0;
+                let n = product.length;
+                //먼저 오름차순으로 배열을 정렬(총가격이 낮은 것 부터)
+                product.sort((a, b) => (a[0] + a[1]) - (b[0] + b[1]));
+                //확인용
+                //console.log(product);
+                //항상 상품 가격이 가장 비싼 것에 할인을 한다고해서 최적의 결과를 출력하는 것이 아니므로
+                //각 경우의 수에 대해 할인을 해보고, 그 중 가장 최적의 결과가 나오는 것을 출력한다(완전탐색)
+                for(let i = 0; i < n; i++){
+                    //예산(m)에서 각 상품가격에 쿠폰을 적용한 값(/2) + 배송비를 뺀 가격을 money변수에 저장
+                    let money = m - (product[i][0] / 2 + product[i][1]); //즉, 사고 나서 남은 가격
+                    let cnt = 1; //이미 상품 한개를 골랐으므로 cnt는 1부터 시작
+                    for(let j = 0; j < n; j++){
+                        //남은 예산이 다음 상품 + 배송비보다 작아지면 break;
+                        //break;를 해주지 않으면 예를 들어, 예산 내에서 고를 수 있는 상품은 3개에서 끝났는데
+                        //그 밑으로 상품이 10,000개가 있다면 의미 없이 10,000을 더 반복(탐색)하기 때문
+                        //주어진 배열을 오름차순으로 정렬했기 때문에 다음 상품이 남은 예산보다 더 비싸다면
+                        //다다음 상품역시 남은 예산보다 더 비쌀 수 밖에 없기 때문에 break;를 걸어줘도 상관 없음
+                        if(j !== i && (product[j][0] + product[j][1] > money)){
+                            break;
+                        }
+                        if(j !== i && (product[j][0] + product[j][1] <= money)){
+                            money -= (product[j][0] + product[j][1]);
+                            cnt++;
+                        }
+                    }
+                    answer = Math.max(answer, cnt);
+                }
+                return answer;
+            }
+            
+            let arr=[[6, 6], [2, 2], [4, 3], [4, 5], [10, 3]];
+            console.log(solution(28, arr));
+            */
+            
+
+
+            /*재풀이(보충)
+            function solution(m, product){
+                let answer = 0;
+                //상품 중 가장 비싼 것
+                //가장 비싼 상품을 할인받는다고해서 그게 매번 최적의 결과를 가져오는가?
+                // -> 상품과 배송비는 각각 다르지만 그 합이 같은 물건이라면 상품가격이 더 큰것에 할인쿠폰을 쓰는 것이 총 가격은 낮아지지만
+                // -> 항상 상품과 배송비는 각각 다르지만 총 합은 같은 경우만 존재하는 것이 아님
+                // -> 만약 상품가격은 100인데 배송비가 1인 물건이 있다면 상품가격이 가장 비싸다고해서 여기에 쿠폰을 써야하는가?
+                // -> 할인 받을 수 있는 금액 자체만 올라가는 것이지 상품가격이 가장 비싼것을 기준으로 할인쿠폰을 적용하는 것은 최적의 결과를 가져오지 않음
+                // -> 선물을 받을 수 있는 최대학생수를 출력해야하기 때문(가격은 상관 없고, 오로지 최대한 많은 학생이 선물을 받게끔 해야함)
+                // 그럼 무엇을 기준으로 할인쿠폰을 적용할 상품을 선택해야 할까?
+                // -> 주어진 입력예제에 따라 할인을 적용할 상품에 대한 기준이 달라지므로
+                // -> ex) [12, 1], [10, 3], [11, 2]와 같이 총비용은 같을 때 가장 비싼 상품에 쿠폰을 적용하면 되겠지만
+                //        [100,1], [50, 3], [11, 4]와 같은 경우에는 총 비용이 가장 비싼 상품에 쿠폰을 적용하면 안된다
+                // -> 모든 경우에 대해 쿠폰을 최적으로 적용할 수 있는 기준이 있을까?
+                // -> 조건식이 다양하고 복잡해질 수록 기준을 정할 수는 있을 것 같은데 지금은 모르겠다
+                // 따라서 명확한 기준을 세우기 어렵기에 완전탐색으로 모든 경우에 대해 쿠폰할인을 적용해보고 
+                // 주어진 조건 내에서 최적값을 찾기위한 탐색(반복)을 진행하는 것
+                let maxPrice = 0;
+                for(let i = 0; i < product.length; i++){
+                    let max = Number.MIN_SAFE_INTEGER;
+                    for(let j = 0; j < 1; j++){
+                        if(product[i][j] > max){
+                            max = product[i][j];
+                        }
+                    }
+                    maxPrice = Math.max(maxPrice, max);
+                }
+                return maxPrice;
+                // 상품 + 배송비가 가장 작은 것들
+                // 똑같은 배열을 탐색하면서 두가지의 다른 조건을 동시에 만족하는지 어떻게 판단?
+                // -> 가격이 가장 높은 상품에 쿠폰을 적용하는 것이 아니므로 조건이 두 가지가 될 필요가 없음
+                // 총 가격이 같은 값이 나오면 어떻게 처리??
+                // -> 이것 역시 상품 하나를 정해놓고 완전탐색을 진행하기 때문에 총가격이 같은지의 여부는 상관없음
+                // 배열을 탐색하면서 어떻게 가장 작은 값을 뽑고, 그 다음 작은 값을 뽑고, 이 값들의 합이 <= m이 되면 탐색을 중지하는 코드를 어떻게 작성?
+                // -> 가격이 작은 값 부터 오름차순으로 정렬하면 해결
+                return answer;
+            }
+            
+            let arr=[[6, 6], [2, 2], [100, 1], [12, 1], [10, 3]];
+            console.log(solution(28, arr));
+            */
+
+            
+            //최종풀이
+            function solution(m, product){
+                let answer = 0;
+                let n = product.length;
+                //주어진 배열을 낮은 가격부터 높은 가격 순으로 오름차순 정렬
+                product.sort((a,b) => (a[0] + a[1]) - (b[0] + b[1]));
+                //정렬된 배열을 순차적으로 완전탐색 
+                for(let i = 0; i < n; i++){
+                    //쿠폰 할인 가격을 각 경우에 적용하고 그걸 기준으로 최적값을 탐색
+                    let money = m - ((product[i][0] / 2) + product[i][1]) //money는 현재 남은 예산. (상품가격의 절반을 할인한 가격 + 배송비)를 초기예산(m)에서 뺀 가격
+                    let cnt = 1; //이미 선물 1개는 고르고 시작하는 것이므로 cnt는 1부터 시작
+                    for(let j = 0; j < n; j++){
+                        if( i !== j && (product[j][0] + product[j][1]) <= money){
+                            //answer++; // 해당 탐색에서 answer++를 하면 모든 경우에서 주어진 예산이 소진될 때 까지 선물 가능한 학생 수가 올라가게 되므로 변수를 새로 만들어야 함
+                            money -= product[j][0] + product[j][1];
+                            cnt++; //각 경우에서 선물 받을 수 있는 최대학생수를 카운팅하는 것이므로 해당 탐색에서 카운팅 횟수를 저장할 변수
+                        }
+                    }
+                    answer = Math.max(answer,cnt);
+                }
+                return answer;
+            }
+            
+            let arr=[[6, 6], [52, 2], [4, 3], [4, 5], [10, 3]];
+            console.log(solution(28, arr));
+            console.log(arr.sort((a,b) => (a[0] + a[1]) - (b[0] + b[1])));
+    </script>
+</body>
+</html>
