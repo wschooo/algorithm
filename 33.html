@@ -170,6 +170,9 @@
                     let money = m - ((product[i][0] / 2) + product[i][1]) //money는 현재 남은 예산. (상품가격의 절반을 할인한 가격 + 배송비)를 초기예산(m)에서 뺀 가격
                     let cnt = 1; //이미 선물 1개는 고르고 시작하는 것이므로 cnt는 1부터 시작
                     for(let j = 0; j < n; j++){
+                        if( i !== j && (product[j][0] + product[j][1]) > money){ // 현재 상품이 남은 예산보다 더 비싸다면 더이상 탐색할 필요가 없으므로 반복 종료
+                            break;
+                        }
                         if( i !== j && (product[j][0] + product[j][1]) <= money){
                             //answer++; // 해당 탐색에서 answer++를 하면 모든 경우에서 주어진 예산이 소진될 때 까지 선물 가능한 학생 수가 올라가게 되므로 변수를 새로 만들어야 함
                             money -= product[j][0] + product[j][1];
