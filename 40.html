@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //5.효율성(해쉬)
+        //학급 회장
+        /*내풀이
+        function solution(arr){
+            let answer = '';
+            let answerA = 0;
+            let answerB = 0;
+            let answerC = 0;
+            let answerD = 0;
+            let answerE = 0;
+            let max = 0;
+            for(let i of arr){
+                switch(i){
+                    case 'A': answerA++;
+                    break;
+                    case 'B': answerB++;
+                    break;
+                    case 'C': answerC++;
+                    break; 
+                    case 'D': answerD++;
+                    break; 
+                    case 'E': answerE++;
+                    break; 
+                }
+            }
+            max = Math.max(answerA, answerB, answerC, answerD, answerE);
+            //return max;
+            switch(max){
+                case answerA: answer += 'A';
+                break;
+                case answerB: answer += 'B';
+                break;
+                case answerC: answer += 'C';
+                break;
+                case answerD: answer += 'D';
+                break;
+                case answerE: answer += 'E';
+                break;
+            }
+            return answer;
+        }
+
+        let a = ['B', 'A', 'C', 'B', 'A', 'C', 'C', 'A', 'B', 'C', 'B', 'B', 'B', 'D', 'E'];
+        console.log(solution(a));
+        //정답은 출력되지만 효율성과 거리가 너무 멀어보임(만약 주어진 조건이 여러개라면?)
+        //요소가 A ~ E까지가 아니고 가령 A ~ ZZZZ(2000개) 까지 존재한다면?
+        //해쉬란 무엇이며 이를 활용하는 방법은???
+        */
+
+
+        //해설코드
+        //hash를 사용하기 위해 Map(객체)을 활용
+        //new(객체생성연산자), Map(객체)
+        //key + value로 이루어진 새로운 객체를 생성
+        //주어진 조건을 만족시키기 위해 get() -> 기존 value를 가져오고, +1 -> value값을 증가시킴
+
+        //map
+        //Map 객체: 메서드를 이용해 특정 값을 넣거나 뺄 수 있음
+        //ex1) let a = new Map(); -> Map 객체 생성, a변수에 저장
+        //a.set('나이', 40); -> 생성된 객체에 set으로 key('나이'), value(40) 삽입
+        //a.get('나이'); -> 40 , get으로 Map 객체를 조회
+        //a.delete('나이'); -> 프로퍼티 삭제 -> 성공하면 true반환
+        //a.clear(); -> 모든 프로퍼티 삭제
+        //객체는 문자열(String)이나 심볼(Symbol)만 프로퍼티의 키로 사용하지만, Map객체에서는 함수나 객체를 포함한
+        //모든 자료형을 프로퍼티의 키로 쓸 수 있음
+        //ex2) let b = {
+        //     1 : '내'         
+        //     2 : '나이'
+        //     3 : '마흔'
+        //     }
+        //  b.1 -> unexpected number 에러(. 뒤에 숫자를 입력하면 error)
+        //  b['1'] -> '내' -> 문자열을 통해서만 조회 가능
+        //ex3) let b = new Map()
+        //b.set(1, '내');
+        //b.set(2, '나이');
+        //b.set(3, '마흔');
+        //b.get(1) -> '내' -> get메서드의 인자로 숫자를 넘겨줘도 value 반환
+        //Map객체는 객체의 프로퍼티를 자주 변경할 때 매우 효율적
+        /*
+        function solution(s){  
+                let answer;
+                let sH = new Map();
+                for(let i of s){
+                    if(sH.has(i)){
+                        sH.set(i, sH.get(i) + 1);
+                    }
+                    else {
+                        sH.set(i, 1);
+                    }
+                    //console.log(sH);
+                    let max = Number.MIN_SAFE_INTEGER;
+                    for(let [key, val] of sH){
+                        //console.log(key, val);
+                        if(val > max){
+                        max = val;
+                        answer = key;
+                        }
+                    }
+                }
+                return answer;
+            }
+            let str="BACBACCACCBDEDE";
+            console.log(solution(str));
+            */
+
+
+            /*최대값 출력을 위해 answer에 값을 할당하면 안되는 이유
+            function solution(s){  
+                let answer = Number.MIN_SAFE_INTEGER;
+                let sH = new Map();
+                for(let i of s){
+                    if(sH.has(i)){
+                        sH.set(i, sH.get(i) + 1);
+                    }
+                    else {
+                        sH.set(i, 1);
+                    }
+                    for(let [key, val] of sH){
+                        //console.log(key, val);
+                        if(val > answer){ //answer가 MIN_SAFE_INTEGER이므로 
+                        answer = key; //바로 첫 key값이 answer에 들어오면서 반복이 시작되지만
+                        } //answer는 key, 즉 문자열이므로 if(val > answer)에서 숫자 > '문자열'로 비교되므로 false값이 나옴
+                    } //때문에 값끼리 비교하여 가장 큰 value를가진 key(문자열)를 answer에 할당하여 출력하기 위해 value 비교를 위한 변수를 따로 만들어줘야 함
+                }
+                return answer;
+            }
+
+            let str="BACBACCACCBDEDE";
+            console.log(solution(str));
+            */
+
+            //재풀이
+            function solution(s){  
+                let answer;
+                //1. 주어진 조건에 맞는 객체 생성(Map으로)
+                let sH = new Map(); //sH(string hash)라는 빈 Map객체 생성
+                for(let i of s){ //s를 탐색하면서
+                if(sH.has(i)){ //has: Map객체에 key가 존재하는지 안하는지 검사하는 메서드(존재하면 true, 존재하지 않으면 false)
+                sH.set(i, sH.get(i) + 1); //sH에 이미 i라는 key가 있으면 set으로 key에 i, get으로 i의 value를 조회한 값(현재 key i의 value값)에 + 1 삽입    
+                }
+                else{ //sH에 i라는 key가 없으면
+                    sH.set(i, 1); //key에 i, value에 1값 삽입
+                }    
+                }//문자열 탐색 종료, 주어진 조건에 맞는 객체 완성
+
+                //2. 가장 큰 value를 가진 key값을 정답으로 출력
+                let max = Number.MIN_SAFE_INTEGER; //value 비교를 위한 변수
+                for(let [key, val] of sH){ ///Map객체는 for of를 통해 순회 가능
+                    //순회는 맵 이터레이터(key-value를 쌍으로 묶은 배열)의 형태로 이뤄지며
+                    //entries메서드로 맵 이터레이터를 확인 가능함
+                    //console.log(sH.entries());
+                    if(val > max){
+                        max = val;
+                        answer = key;
+                    }
+                }
+                return answer;
+            }
+            let str = "BACBACCACCBDEDE";
+            console.log(solution(str));
+    </script>
+</body>
+</html>
