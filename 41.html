@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //5.효율성
+        //아나그램(해쉬)
+        /*내풀이
+        function solution(str1, str2){
+            let answer = 'YES';
+            let sH1 = new Map();
+            let sH2 = new Map();
+            for(let i of str1){
+                if(sH1.has(i)){
+                    sH1.set(i, sH1.get(i) + 1);
+                }
+                else{
+                    sH1.set(i, 1);
+                }
+            }
+            //console.log(sH1);
+            //console.log(Object.keys(sH1)); -> 출력 X(빈배열이 나옴)
+            for(let i of str2){
+                if(sH2.has(i)){
+                    sH2.set(i, sH2.get(i) + 1);
+                }
+                else{
+                    sH2.set(i, 1);
+                }
+            }
+            //console.log(sH1);
+            //console.log(sH2);
+
+            if(sH1 === sH2){
+                return answer;
+            }
+            else {
+                answer = 'NO';
+                return answer;
+            }   
+        }
+        let a = "AbabAeeCe";
+        let b = "AbabAeeCe";
+        console.log(solution(a,b));
+        //문제점: 오답이 출력 됨
+        //객체와 객체끼리 ===(일치연산자)로 비교가 되는가?       
+        */
+
+
+        /*객체와 객체를 비교
+        //1. JSON.stringify()함수    
+        if(JSON.stringify(sH1) === JSON.stringify(sH2)){
+            return answer;
+        }
+        else {
+            answer = 'NO';
+            return answer;
+        }
+        //객체의 프로퍼티 순서가 중요함
+        //순서가 같다면 true를 반환하지만, 순서가 달라지면 false를 반환하는 단점
+        //따라서 제한적인 부분이 존재
+
+        //2. 객체를 비교하는 함수를 만들기
+        function ObjCompare(sH1, sH2){
+        let answer = 'YES';
+        let sH1_keys = Object.keys(sH1);
+        let sH2_keys = Object.keys(sH2);
+        if( sH1_keys.length !== sH2_keys.length){ //서로 다른 문자가 존재하면 길이가 달라지므로
+            return false;
+        }
+        for (let k of sH1_keys){ //한 객체의 속성을 순회하면서
+            if(str1[k] !== str2[k]){ //두 문자열의 value값이 같지 않으면
+                return false; //false
+            }
+        }
+        return answer;
+    }
+    //문제점: Object.keys()가 제대로 출력이 안됨 -> 사용법이 잘못 된 듯
+    //어떻게 객체 두개를 동시에 return?
+    //->두개를 동시에 return하는 방식이 아닌, 객체를 생성하되 answer를 return하는 방향으로
+    */
+
+    /*재풀이
+    function solution(str1, str2){
+                let answer="YES";
+                let sH1 = new Map();
+                let sH2 = new Map();
+                for(let i of str1){
+                    if(sH1.has(i)){
+                        sH1.set(i , sH1.get(i) + 1);
+                    }
+                    else {
+                        sH1.set(i, 1)
+                    }
+                }
+                console.log(sH1);
+                for(let i of str2){
+                    if(sH2.has(i)){
+                        sH2.set(i , sH2.get(i) + 1);
+                    }
+                    else {
+                        sH2.set(i, 1)
+                    }
+                }
+                console.log(sH2);
+                for(let i of str1){
+                    if(sH1.has(i) !== sH2.has(i) || sH1.get(i) !== sH2.get(i)){  //sH1과 sH2에서 서로 다른 문자가 발견되거나, 문자간 개수가 다를 경우
+                        answer = 'NO';
+                        return answer;
+                    }
+                } 
+                return answer;
+            }
+            
+            let a = "AeeJJJJeeejk";
+            let b = "AeeJJJjeeejk";
+            console.log(solution(a, b));
+            //문제점: str1을 기준으로 순회하므로 str2의 문자열이 str1의 문자열과 겹치고, 각 문자열의 개수가 같기만 해도 answer의 retrun값은 YES가 된다. 
+            //즉, Map sH1의 key가 Map sH2에 들어있고 sH1.get(i) === sH2.get(i)를 만족시키기만해도 YES를 return한다.
+            //만약 let a = AeeJjk이고, let b = AeeJjkK라면 str2에 str1과 다르게 "K"라는 문자가 존재하므로 NO를 return해야하지만
+            //str1을 기준으로 순회하므로 "A", "e, "J", "j", "k"는 모두 str2에 존재하고(서로 다른 문자가 없고), 각 문자의 개수 또한 같기 때문에 return값이 YES가 되는 것임
+            //str2를 기준으로 순회하여도 똑같은 문제가 발생한다
+            //-> 주어진 조건에서 두 문자열의 길이가 항상 똑같다고 했으므로 위의 풀이에서 문제될 부분은 없어보인다
+            //-> 하지만 좀 더 간단하게 표현하는 방법은 없을까? 
+            */
+
+
+            /*해설코드
+            function solution(str1, str2){
+                let answer="YES"; 
+                let sH1 = new Map();
+                for(let i of str1){
+                    if(sH1.has(i)){
+                        sH1.set(i, sH1.get(i) + 1);
+                    }
+                    else {
+                        sH1.set(i, 1);
+                    }
+                }
+                for(let i of str2){
+                    if(!sH1.has(i) || sH1.get(i) === 0){
+                        return 'NO'
+                    }
+                    if(sH1.has(i)){
+                        (sH1.set(i, sH1.get(i) - 1));
+                    }
+                }
+                return answer;
+            }
+            
+            let a="AbaAeCe";
+            let b="baeeACA";
+            console.log(solution(a, b));
+            */
+
+            //최종풀이
+            function solution(str1, str2){
+                //1. 문자열1과 그 개수를 담을 sH객체 생성
+                let answer = 'YES';
+                let sH = new Map();
+                for(let i of str1){
+                    if(sH.has(i)){
+                        sH.set(i, sH.get(i) + 1);
+                    }
+                    else {
+                        sH.set(i, 1);
+                    }
+                    //console.log(sH);
+                }
+                //문자열2를 순회하면서 조건판단
+                //문자열1이 담긴 객체(sH)를 문자열2를 기준으로 순회하면서, 만약 문자열2의 문자(i)가 sH에서 발견된다면 value값에서 한개씩 차감하고 
+                //문자열2의 문자(i)가 sH에 없거나(!sH.has(i)), value값이 0이되면(문자는 존재하지만 그 개수가 서로 다른 경우) 'NO'를 리턴하게 만드는 방법  
+                for(let i of str2){
+                    /*
+                    if(sH.has(i)){ //만약 문자열2의 문자(i)가 sH객체에 존재한다면
+                        sH.set(i, sH.get(i) - 1); //개수에서 1개씩 차감
+                    }
+                    //해당 코드가 이 위치에 오면 안되는 이유: 문자열이 중복되어 sH의 key의 value가 0이되는 순간
+                    //바로 아래 코드의 조건식을 만족하게 되므로 올바른 조건 판단이 되지 못함
+                    //예를 들어, 입력 예제에서 문자열 "a"에 대한 조건 판단이 이뤄질 때 sH의 key "a"의 value는 0이되고 바로 아래의 조건식을 만족하게 됨
+                    */
+                    if(!sH.has(i) || sH.get(i) === 0){ //문자열2의 문자(i)가 sH객체에 없거나, 중복될 때마다 차감된 개수가 0개가 되면(문자열2의 문자(i)의 개수가 더 많을 때)
+                        return 'NO'; //NO를 리턴
+                    }
+                    if(sH.has(i)){ //만약 문자열2의 문자(i)가 sH객체에 존재한다면
+                        sH.set(i, sH.get(i) - 1); //개수에서 1개씩 차감
+                    }
+                }
+                return answer;
+            }
+
+            let a="AbbbaAeCe";
+            let b="babeeACAb";
+            console.log(solution(a, b));
+    </script>
+</body>
+</html>
