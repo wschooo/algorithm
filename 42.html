@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //5.효율성
+        //모든 아나그램 찾기
+        //내풀이
+        function solution(str1,str2){
+            let answer = 0;
+            let sH = new Map();
+            let lt = 0;
+            for(let rt = 0; rt < str2.length; rt++){
+                if(sH.has(str1[rt])){
+                    sH.set(str1[rt], sH.get(str1[rt]) + 1);
+                }
+                else{
+                sH.set(str1[rt], 1);
+                }
+                //console.log(sH);
+            }
+                for(let i of str2){
+                    if(!sH.has(i) || sH.get(i) === 0){
+                        answer = 0;
+                        break;
+                    }
+                    else {
+                        answer = 1;
+                    }
+                if(sH.has(i)){
+                    sH.set(i, sH.get(i), - 1);
+                }
+                //console.log(sH);
+                //console.log(answer);
+            }
+            for(let rt = str2.length; rt < str1.length; rt++){
+                if(sH.has(str1[rt])){
+                    sH.set(str1[rt], sH.get(str1[rt]) + 1);
+                    sH.delete(str1[lt]);
+                    lt++;
+                }
+                else {
+                    sH.set(str1[rt], 1);
+                    sH.delete(str1[lt]);
+                    lt++;
+                }
+                console.log(sH);
+                for(let i of str2){
+                    if(!sH.has(i) || sH.get(i) === 0){
+                        break;
+                    }
+                    else if(answer === 0){
+                        answer = 0;
+                        answer++;
+                    }
+                    else if(answer === 1){
+                        answer = 1;
+                        answer++;
+                    }
+                if(sH.has(i)){
+                    sH.set(i, sH.get(i), - 1);
+                }
+            }
+            }
+            return answer;
+        }
+        let a = "baAbcba";
+        let b = "baA";
+        console.log(solution(a, b));
+        //문제점: .delete()메서드를 사용하면 .set()메서드를 사용했을 때와 달리 key의 value값을 임의로 변경할 수 없고 key와 value값이 쌍으로 삭제 됨.
+        //때문에 투포인터를 사용했을 때 새로 들어올 문자열 str[rt]와 지워져야 할 문자열 str[lt]가 같은 문자라면 
+        //.set()을 사용하여 key의 value값을 변경할 수 있기 때문에 문자열에 대한 중복을 반영할 수 있지만
+        //이후 .delete()를 사용하여 str[lt]문자열을 지워줄 때 str[rt]와 str[lt]가 같은 문자이므로 
+        //문자열에 대한 중복이 반영되어 있는 key와 value값이 모두 삭제되어 버림
+    </script>
+</body>
+</html>
