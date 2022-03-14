@@ -11,6 +11,7 @@
         //5.효율성
         //모든 아나그램 찾기
         //내풀이
+        /*
         function solution(str1,str2){
             let answer = 0;
             let sH = new Map();
@@ -39,17 +40,44 @@
                 //console.log(answer);
             }
             for(let rt = str2.length; rt < str1.length; rt++){
+                /*
                 if(sH.has(str1[rt])){
                     sH.set(str1[rt], sH.get(str1[rt]) + 1);
                     sH.delete(str1[lt]);
                     lt++;
                 }
+                */
+               /*
+               if(sH.has(str1[rt])){
+                   sH.delete(str1[rt]);
+                   sH.set(str1[rt], 1);
+                   sH.delete(str1[lt]);
+                   if(str1[rt] === str1[lt]){
+                       sH.set(str1[rt], 1);
+                       lt++;
+                       //console.log(lt);
+                   }
+                   else{
+                   lt++;
+                   }
+                   //console.log(lt);
+                   if(str1[lt] === str1[rt]){
+                        sH.set(str1[rt], sH.get(str1[rt]) + 1);
+                    }
+               }
                 else {
                     sH.set(str1[rt], 1);
+                    if(sH.get(str1[lt]) > 1){ 
                     sH.delete(str1[lt]);
+                    sH.set(str1[lt], 1);
+                    }
+                    else{
+                    sH.delete(str1[lt]);
+                    }
                     lt++;
                 }
                 console.log(sH);
+                console.log(lt);
                 for(let i of str2){
                     if(!sH.has(i) || sH.get(i) === 0){
                         break;
@@ -72,11 +100,198 @@
         let a = "baAbcba";
         let b = "baA";
         console.log(solution(a, b));
+        */
         //문제점: .delete()메서드를 사용하면 .set()메서드를 사용했을 때와 달리 key의 value값을 임의로 변경할 수 없고 key와 value값이 쌍으로 삭제 됨.
         //때문에 투포인터를 사용했을 때 새로 들어올 문자열 str[rt]와 지워져야 할 문자열 str[lt]가 같은 문자라면 
         //.set()을 사용하여 key의 value값을 변경할 수 있기 때문에 문자열에 대한 중복을 반영할 수 있지만
         //이후 .delete()를 사용하여 str[lt]문자열을 지워줄 때 str[rt]와 str[lt]가 같은 문자이므로 
         //문자열에 대한 중복이 반영되어 있는 key와 value값이 모두 삭제되어 버림
+        //주어진 입력조건에만 맞춘다면 그때그때 조건을 수정하여 답을 출력할 수 있지만 
+        //모든 경우에 일괄적으로 적용 될 조건을 찾지 못함
+        
+
+        /*원리를 듣고 재풀이
+        //기준문자열(t)과, 비교대상문자열(s)의 길이가 같아질 때 부터 비교 시작
+        //즉 t가 "abc"이고 s가 "bfewqaz"라면 "bf"를 기준으로 만들어진 s의 hash에 
+        //"e가"추가되어("bfe"), "abc"(t)와의 길이가 같아졌을 때 부터 바로 비교
+        //비교를 위한 위한 함수를 따로 만들기
+
+        function hashCompare(map1, map2){
+            for(let [key, val] of map1){
+                if(!map2.has(key) || map1.get(key) !== map2.get(key)){
+                    return false;
+                }
+            }
+            return true;
+        }
+        function solution(s, t){
+            let answer = 0;
+            let tH = new Map();
+            let sH = new Map();
+            let lt = 0;
+            for(let i of t){
+                if(tH.has(i)){
+                    tH.set(i, tH.get(i) + 1);
+                }
+                else {
+                    tH.set(i, 1);
+                }
+            }
+            for(let i = 0; i < t.length - 1; i++){
+                if(sH.has(s[i])){
+                    sH.set(s[i], sH.get(s[i]) + 1);
+                }
+                else {
+                    sH.set(s[i], 1);
+                }
+            }
+
+            for(let i = t.length -1; i < s.length; i++){
+                if(sH.has(s[i])){
+                sH.set(s[i], sH.get(s[i]) + 1);
+                }
+                else {
+                    sH.set(s[i], 1);
+                }
+                if(sH.size !== tH.size){
+                    sH.set(s[lt], sH.get(s[lt]) - 1);
+                    if(sH.get(s[lt]) === 0){
+                        sH.delete(s[lt]);
+                    }
+                    lt++;
+                    //return false;
+                }
+               else {
+                       if(hashCompare(sH, tH)){
+                           answer++;
+                           sH.set(s[lt], sH.get(s[lt]) - 1);
+                            if(sH.get(s[lt]) === 0){
+                                sH.delete(s[lt]);
+                            }
+                           lt++;
+                       }
+                       else {
+                        sH.set(s[lt], sH.get(s[lt]) - 1);
+                        if(sH.get(s[lt]) === 0){
+                            sH.delete(s[lt]);
+                        } 
+                           lt++;
+                       }
+               }
+            }
+            return answer;
+        }
+        
+        let a="bbbbbbbbbbbb";
+        let b="bbb";
+        console.log(solution(a, b));
+        //정답은 출력 되지만 가독성이 매우 나쁨
+        //중복되는 부분을 줄여 코드를 더 간소화 해야함
+        */
+
+        /*해설코드
+        function compareMaps(map1, map2){
+                if(map1.size !== map2.size) return false;
+                for(let [key, val] of map1){
+                    if(!map2.has(key) || map2.get(key) !== val) return false;
+                }
+                return true;
+            }
+            function solution(s, t){
+                let answer = 0;
+                let tH = new Map();
+                let sH = new Map();
+                for(let x of t){
+                    if(tH.has(x)) tH.set(x, tH.get(x) + 1);
+                    else tH.set(x, 1);
+                }
+                let len = t.length - 1;
+                for(let i = 0; i < len; i++){
+                    if(sH.has(s[i])) sH.set(s[i], sH.get(s[i]) + 1);
+                    else sH.set(s[i], 1);
+                }
+                let lt = 0;
+                for(let rt = len; rt < s.length; rt++){
+                    if(sH.has(s[rt])) sH.set(s[rt], sH.get(s[rt]) + 1);
+                    else sH.set(s[rt], 1);
+                    if(compareMaps(sH, tH)) answer++;
+                    sH.set(s[lt], sH.get(s[lt]) - 1);
+                    if(sH.get(s[lt]) === 0) sH.delete(s[lt]);
+                    lt++;
+                }
+                return answer;
+            }
+            
+            let a="bacaAacba";
+            let b="abc";
+            console.log(solution(a, b));
+            */
+
+
+            //최종풀이
+            //3. 아나그램이 맞는지 판단하는 함수생성
+            function compareMaps(map1, map2){
+                if(map1.size !== map2.size){ //key의 개수가 다르면 아나그램X (ex) abc, bbc
+                    return false;
+                }
+                for(let [key, val] of map1){ 
+                    if(!map2.has(key) || map1.get(key) !== map2.get(key)){ //key가 다르거나 (ex) abc, abd // key는 같지만 value가 다른경우 (ex) abb,aab //아나그램X 
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            function solution(s, t){
+                let answer = 0;
+                //1. 비교할 문자열을 객체화
+                //기준문자열
+                let tH = new Map();
+                for(let i of t){
+                    if(tH.has(i)){
+                        tH.set(i, tH.get(i) + 1);
+                    }
+                    else {
+                        tH.set(i, 1);
+                    }
+                }
+                //비교문자열
+                let sH = new Map();
+                let len = t.length - 1;
+                for(let i = 0; i < len; i++){
+                    if(sH.has(s[i])){
+                        sH.set(s[i], sH.get(s[i]) + 1);
+                    }
+                    else {
+                        sH.set(s[i], 1);
+                    }
+                }
+
+                //2. 비교문자열과 기준문자열의 길이가 같아질 때 부터 
+                //비교문자열의 끝까지 순회하며 아나그램인지 판단 시작
+                let lt = 0;
+                for(rt = len; rt < s.length; rt++){
+                    if(sH.has(s[rt])){
+                        sH.set(s[rt], sH.get(s[rt]) + 1);
+                    }
+                    else {
+                        sH.set(s[rt], 1);
+                    }
+                    if(compareMaps(sH, tH)){
+                        answer++;
+                    }
+                    sH.set(s[lt], sH.get(s[lt]) - 1);
+                    if(sH.get(s[lt]) === 0){
+                        sH.delete(s[lt]);
+                    }
+                    lt++;
+                }
+                return answer;
+            }
+            
+            let a = "bbbbbbbbbbbbb";
+            let b = "bbb";
+            console.log(solution(a, b));
     </script>
 </body>
 </html>
