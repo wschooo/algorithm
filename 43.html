@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //6.자료구조(스택)
+        //올바른 괄호
+        /*내풀이
+        function solution(str){
+                let answer = 'YES';
+                let leftCount = 0;
+                let rightCount = 0;
+                for(let i = 0; i < str.length; i++){
+                    if(str[0] !== '(' || str[str.length - 1] !== ')'){
+                        answer = 'NO';
+                    }
+                    if(str[i] === '('){
+                        leftCount++;
+                    }
+                    else if(str[i] === ')'){
+                        rightCount++;
+                    }
+                }
+                if(leftCount !== rightCount){
+                    answer = 'NO';
+                }
+                //console.log(leftCount);
+                //console.log(rightCount);
+                return answer;
+            }
+            
+            let a = '())(()';
+            console.log(solution(a));
+
+            //문제점: 단순하게 주어진 입력에서 괄호를 이루는 '(' 와 ')'의 개수를 비교했기 때문에 
+            // '())(()' 과 같이 괄호를 이루지 못하는 예시에서도 YES를 출력함
+            //스택에 대한 활용을 전혀 하지 못했음
+            
+            //스택
+            //데이터를 집어 넣을 수 있는 선형 자료형(데이터를 한 줄로 놓아 탑을 쌓는 형태)
+            //나중에 집어 넣은 데이터가 먼저 나오는 특징(LIFO(Last In First Out))
+            //데이터를 집어 넣는 push, 추출하는 pop, 가장 나중에 집어 넣은 데이터를 확인하는 peek등의 작업이 가능
+            */
+
+            //해설코드
+            
+    </script>
+</body>
+</html>
