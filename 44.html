@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //6.자료구조
+        //괄호문자제거
+        //내풀이
+        function solution(str){  
+                let answer;
+                let stack=[];
+                for(let i of str){
+                    stack.push(i);
+                    if(i === ')'){
+                       while(i !== ')'){
+                           stack.pop();
+                           answer = stack;
+                       }
+                    }
+                }
+                return answer;
+            }
+
+            let s = '(A(BC)D)EF(G(H)(IJ)K)LM(N)';
+            console.log(solution(s));
+            // ')'를 만나면 이전까지 쌓아왔던 stack을 모두 pop하고
+            //'('를 만나기 전까지 다시 stack에 push를 하다가 
+            //')'를 만나면 또 stack에 쌓여있는 것들을 pop하는 방법은?
+    </script>
+</body>
+</html>
