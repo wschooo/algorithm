@@ -86,17 +86,17 @@
         function solution(board, moves){
                 let answer=0;
                 let stack=[];
-                moves.forEach(pos => {
-                    for(let i=0; i<board.length; i++){
-                        if(board[i][pos-1]!==0){
-                            let tmp=board[i][pos-1];
-                            board[i][pos-1]=0;
-                            if(tmp===stack[stack.length-1]){
-                                stack.pop();
+                moves.forEach(pos => { //현재 위치를 고정할 pos
+                    for(let i=0; i<board.length; i++){ //행을 내리면서 탐색
+                        if(board[i][pos-1]!==0){ //인형을 만났을 때
+                            let tmp=board[i][pos-1]; // 꺼내준 이후 임시변수(tmp)에 저장해주고
+                            board[i][pos-1]=0; //꺼냈으므로 0으로 바꿔 줘야 함
+                            if(tmp===stack[stack.length-1]){ //stack의 가장 위의 것과 꺼낸 인형이 같다면
+                                stack.pop(); //꺼낸 인형이 아직 들어가지 않았으므로 pop을 한번만
                                 answer+=2;
                             }
-                            else stack.push(tmp);
-                            break;
+                            else stack.push(tmp); 
+                            break; //일련의 동작이 이뤄지고 계속 반복되면 안되므로 break
                         }
                     }
                 });
