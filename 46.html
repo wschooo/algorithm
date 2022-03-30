@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //6.자료구조
+        //후위식 연산(postfix)
+        //내풀이
+        //후위식 연산(후위표기식): 일반적으로 사용하는 피연산자 사이에 연산자가 들어가는 형태의 중위표기식과는 다르게
+        //피연산자가 먼저 쓰이고 그 뒤에 연산자가 나오는 형태의 표기식
+        //ex) 7 + 8 -> 중위표기식, 78+ -> 후위표기식
+        // 7 * (9 + 3) -> 793+*
+        //사칙연산이나 괄호의 우선순위를 생각하지 않아도 되므로 식이 보다 직관적인 장점이 있음
+
+        /*내풀이
+        function solution(exp){
+            let answer;
+            let stack = [];
+            for(let i of exp){
+                if(isNaN(i)){
+                    if(i === '+'){
+                        let plus = stack[stack.length - 2] + stack[stack.length - 1];
+                        stack.pop();
+                        stack.pop();
+                        stack.push(plus);
+                        console.log(stack);
+                    }
+                    else if(i === '-'){
+                        let minus = stack[stack.length - 2] - stack[stack.length - 1];
+                        stack.pop();
+                        stack.pop();
+                        stack.push(minus);
+                        console.log(stack);
+                    }
+                    else if(i === '*'){
+                        let multifly = stack[stack.length - 2] * stack[stack.length - 1];
+                        stack.pop();
+                        stack.pop();
+                        stack.push(multifly);
+                        console.log(stack);
+                    }
+                    else if(i === '/'){
+                        let divide = stack[stack.length - 2] / stack[stack.length - 1];
+                        stack.pop();
+                        stack.pop();
+                        stack.push(divide);
+                        console.log(stack);
+                    }
+                }
+                else {
+                    //문자열간 '+'는 문자열을 합치기 때문에 i를 Number로 바꿔줌
+                    stack.push(Number(i));
+                }
+            }
+            answer = stack[0];
+            return answer;
+        }
+        let a = '4234*+-';
+        console.log(solution(a));
+        */
+
+        //해설코드
+        function solution(s){  
+                let answer;
+                let stack=[];
+                for(let x of s){ //탐색시작
+                    if(!isNaN(x)) stack.push(Number(x)); //숫자일 때 문자열을 숫자로 바꿔서 stack에 push
+                    else{ //연산자일 때
+                        let rt=stack.pop(); //먼저 꺼내는 것(가장 최상단에 위치한 요소)
+                        let lt=stack.pop(); //그 다음 꺼내는 것(촤상단 바로 아래에 위치한 요소)
+                        //ex) let stack = [1,2,3,4,5];
+                        //console.log(stack.pop()); 
+                        // -> 5
+                        //stack.pop()자체가 스택의 가장 최상단의 요소를 꺼내는 것 뿐만 아니라 최상단의 요소 그 자체를 반환
+                        if(x==='+') stack.push(lt+rt); //lt와 rt에 대한 사칙연산의 결과를 stack에 push
+                        else if(x==='-') stack.push(lt-rt);
+                        else if(x==='*') stack.push(lt*rt);
+                        else if(x==='/') stack.push(lt/rt);
+                    }
+                }
+                answer=stack[0];
+                return answer;
+            }
+
+            let str="352+*9-";
+            console.log(solution(str));
+    </script>
+</body>
+</html>
