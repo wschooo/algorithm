@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //6.자료구조
+        //공주 구하기
+        //큐(queue): 가장 먼저 들어온 데이터가 가장 먼저 빠져나가는 구조이며(FIFO), 스택과 상반되는 순서를 가짐
+        //스택(stack)은 들어가는 입구와 나오는 출구가 동일하지만 큐(queue)는 나오는 출구와 들어가는 입구가 다름
+        //가장 먼저 도착한 사람이 가장 먼저 상품을 구매할 수 있는 것과 같은 흐름
+        //큐에서는 핵심이 되는 front와 rear 두 개의 포인터가 있고 이는 가장 처음의 원소, 그리고 가장 마지막의 원소를 의미
+        //큐에서 값을 하나 꺼내오면 첫 번째 원소가 제거되고, 큐에 어떠한 데이터를 삽입하면 기존 rear의 위치에서 + 1만큼 이동하게 됨
+        
+        /*내풀이
+        function solution(n, k){
+            let answer;
+            let m = Array(n).fill().map((v,i) => i + 1);
+            //console.log(m);
+            let index = 0;
+            let count = 0;
+            while(m.length !== 1){
+                count++;
+                if(count % 3 === 0){
+                    m.shift(m[index]);
+                }
+                else {
+                    m.push(m[index]);
+                    m.shift(m[index]);
+                }
+                console.log(m);
+            }
+            answer = m[0];
+            return answer;
+        }
+        let a = 8;
+        let b = 3;
+        console.log(solution(a,b));
+        */
+
+
+        //해설코드
+        function solution(n, k){
+            let answer;
+            let queue = Array.from({length: n}, (v, i) => i + 1); //길이가 n이고 요소가 i+1로 채워진 배열 생성
+            while(queue.length) { //q가 0이 될 때 까지 반복
+                for(let i = 1; i < k; i++) queue.push(queue.shift()); //1부터 k-1까지 queue에 push & shift
+                queue.shift(); //k일때는 shift만
+                if(queue.length === 1) answer = queue.shift(); //반복이 돌다 k가 1이 됐을 때, 즉 최종 요소 1개만 남았을 때 answer에 그값을 저장하면서 queue에서 shift
+                //queue.length = 0 이되면서 while문 종료
+            }
+            console.log(queue);
+            return answer;
+        }
+        let a = 8;
+        let b = 3;
+        console.log(solution(a,b));
+    </script>
+</body>
+</html>
