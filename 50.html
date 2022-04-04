@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //section7.정렬,그리디,결정알고리즘
+        //50. 선택 정렬
+        //성능이 좋지 않지만, 코드가 간단하고 보통 30이하의 작은 수 에서는 효과적으로 작동
+        //배열을 처음부터 훑어서 가장 작은 수를 앞에다 가져다 놓고, 계속 반복하여 끝까지 정렬
+        //배열을 한 번 훑었을 때 숫자(원소)를 하나 밖에 정렬을 못하므로 성능이 좋지 않은 것
+        //전체에서 가장 작은 수를 찾아서 가장 앞에 놓고, 그 다음번 인덱스 부터 배열의 끝까지 가장 작은 수를 찾아서 앞에 놓고,
+        //또 그 다음번 인덱스 부터 배열의 끝까지 가장 작은 수를 찾아 앞에다 놓는 작업을 반복하는 것임
+        
+        /*내풀이
+        function solution(arr){
+            let answer;
+            //배열 중 최솟값을 찾기 위한 탐색
+            for(let i = 0; i < arr.length; i++){
+                let minIndex = i; //현재 배열의 원소 중 가장 작은 최솟값의 위치(인덱스)를 가장 첫번째 원소라고 가정
+                for(let j = i + 1; j < arr.length; j++){ //i번째 다음 위치(인덱스)부터 배열의 끝까지 탐색
+                    if(arr[j] < arr[minIndex]){//탐색 중 현재의 최솟값 보다 더 작은 요소가 발견 된다면
+                        minIndex = j //해당 요소의 위치(인덱스)를 최솟값의 인덱스로
+                    }
+                }
+                let tempMin = arr[i]; //현재의 비교를 위한 임시 최솟값(인덱스 번호가 아닌 요소 그 자체)을 변수에 저장해두고
+                arr[i] = arr[minIndex]; //현재 탐색하는 배열의 가장 앞의 위치(인덱스)로 바꿔줌 -> 발견된 최솟값을 배열의 가장 앞으로 땡겨주는 것임
+                arr[minIndex] = tempMin; // 그리고 발견된 최솟값이 위치한 자리에 비교를 위한 임시 최솟값(가장 앞에 위치한 요소)을 넣어 줌 -> 즉, 서로 위치를 바꿔 준 것임 
+            }
+            answer = [arr];
+            return answer;
+        }
+        
+        let a = [9, 3, 5, 1, 13, 6, 17, 4];
+        console.log(solution(a));
+        //가장 최솟값의 인덱스를 찾아 위치를 기준으로 값을 바꿔주는 것 말고,
+        //탐색을 하다가 최솟값을 발견 할 때 마다 즉시 자리를 바꿔주는 것도 가능할지?
+        */
+
+        /*재풀이
+        //최솟값의 위치를 찾아 탐색이 끝난 이후 그 값을 바꿔주는 것이 아닌,
+        //탐색을 진행 하면서 최솟값이 발견 될 때 마다 값을 갱신해보기
+        function solution(arr){
+            let answer;
+            for(let i = 0; i < arr.length; i++){
+                let min = arr[i];
+                for(let j = i + 1; j < arr.length; j++){
+                    if(arr[j] < min){
+                        let temp = arr[i];
+                        arr[i] = arr[j];
+                        arr[j] = temp;
+                        min = arr[i];
+                        //console.log(arr);
+                    }
+                }
+            }
+            answer = arr;
+            return answer;
+        }
+        
+        let a = [9, 10, 5, 13, 1, 6, 17, 4];
+        console.log(solution(a));
+        */
+
+        //해설코드
+         function solution(arr){
+            let answer=arr;
+            for(let i = 0; i < arr.length - 1; i++){
+                let idx = i; //배열의 제일 앞자리 위치를 잡아줄 변수
+                for(let j = i + 1; j < arr.length; j++){
+                    if(arr[j] < arr[idx]){
+                        idx = j;
+                    }
+                }
+                [arr[i], arr[idx]] = [arr[idx], arr[i]]; //위치를 바꿔주기 위한 변수를 만들 필요 없이 서로를 교환(최신버전에서 가능) 
+            }
+
+            return answer;
+        }
+
+        let arr = [13, 5, 11, 3, 23, 15];
+        console.log(solution(arr));
+    </script>
+</body>
+</html>
