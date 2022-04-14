@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      //section7. 정렬,그리디,결정알고리즘
+      //58. 결혼식
+      /*내풀이
+
+      function solution(arr) {
+        let answer = 0;
+        arr.sort((a, b) => a[1] - b[1]); //결혼식에서 떠나는 시간을 기준으로 오름차순 정렬
+        //console.log(arr);
+        for (let i = 0; i < arr.length; i++) {
+          //가장 먼저 온 사람부터 이후에 도착하는 사람 몇 명과 시간이 겹치는지 탐색
+          let count = 1; //겹치는 사람을 카운팅 하기위한 변수
+          for (let j = i + 1; j < arr.length; j++) {
+            if (arr[i][1] > arr[j][0]) {
+              //먼저 온 사람의 가는 시간과, 이후에 도착한 사람의 오는 시간을 기준으로 비교
+              count++;
+            }
+            if (arr[i][1] < arr[j][0]) {
+              //더이상 시간이 겹치는 사람이 발견되지 않으면 불필요한 탐색을 줄이기 위해 break;
+              break;
+            }
+          }
+          if (count >= answer) {
+            //가장 많이 겹치는 횟수를 정답으로
+            answer = count;
+          }
+        }
+        return answer;
+      }
+
+      let a = [
+        [14, 18],
+        [12, 15],
+        [15, 20],
+        [20, 30],
+        [5, 14],
+      ];
+      console.log(solution(a));
+      //문제점: 결혼식에서 떠나는 시간을 기준으로 정렬하였는데 현재요소 이전의 요소들에 대한 경우를 고려하지 못함
+      //ex) 떠나는 시간을 기준으로 16 17/ 14 18/ 16 18 순서로 정렬이 되어 있고 현재 16 18 요소를 기준으로 탐색을 한다면
+      //이전 요소들인 16 17, 14 18도 조건을 만족하지만 카운팅 되지 못하고 넘어가게 됨
+      //16 17, 18 19, 16 18, 16 19
+      */
+
+      /*재풀이
+      function solution(arr) {
+        let answer = 0;
+        arr.sort((a, b) => a[1] - b[1]);
+        console.log(arr);
+        for (let i = 0; i < arr.length; i++) {
+          let count = 0;
+          //console.log(arr[i][0], arr[i][1]);
+          for (let j = 0; j < arr.length; j++) {
+            //console.log(arr[j][1]);
+            if (arr[i][0] < arr[j][1] && arr[i][1] >= arr[j][1]) {
+              //같은 시간에 떠나는 사람도 포함
+              count++;
+            }
+          }
+          console.log(count, "명");
+          if (count >= answer) {
+            answer = count;
+          }
+        }
+        return answer;
+      }
+
+      let a = [
+        [16, 17],
+        [14, 18],
+        [16, 18],
+        [13, 20],
+      ];
+      console.log(solution(a));
+      //문제점: 떠나는 시간을 기준으로 탐색할 때 머무는 시간이 가장 긴 사람 차례에서
+      //동시에 머무는 사람의 최대 인원수가 카운팅 되겠지만(정답은 출력)
+      //각각의 경우에서 동시에 머무는 사람의 수가 정확하게 카운팅 되지는 않음
+      
+      //이중 반복문을 통한 완전 탐색에 가깝고, 한번에 모든 최적해를 찾아가는 그리디와는 거리가 멀어 보인다
+      //그냥 도착시간과 떠나는 시간을 모두 고려하여서 단 한번의 탐색으로 모든 최적해를 찾아 정답을 출력 할 수 있지 않을까?
+      //ex)[16, 17],14, 18],[16, 18],[13, 20]
+      */
+
+      /*최종풀이
+      function solution(arr) {
+        let answer = 1;
+        arr.sort((a, b) => {
+          if (a[1] === b[1]) return a[0] - b[0];
+          else return a[1] - b[1];
+        });
+        //오름차순 정렬을 해준 이유는 가장 먼저 떠나는 사람을 기준점으로 잡기 위함
+        //정렬 없이 조건을 판단하면 떠나는 시간과 도착시간이 같은 사람까지 카운팅이 되는 경우가 발생
+        console.log(arr);
+        for (let i = 1; i < arr.length; i++) {
+          let start = arr[0];
+          if (arr[i][1] <= start[0] || start[1] <= arr[i][0]) {
+            //도착 시간!= 떠나는 시간, 떠나는 시간 != 도착시간 즉, 머무는 시간대가 아예 겹치지 않는 사람은 제외
+            continue;
+          } else {
+            answer++; //겹치면 카운팅
+          }
+        }
+
+        return answer;
+      }
+
+      let a = [
+        [14, 15],
+        [16, 17],
+        [16, 18],
+        [14, 18],
+        [13, 20],
+      ];
+      console.log(solution(a));
+      //문제점: 기준점을 가장 빨리 떠나는 사람으로 잡은 이유는?
+      //-> 결국 모든 경우에 대한 고려를 하지 못했기 때문에 오답이 출력 됨
+      */
+
+      /*해설코드
+      //도착한 시간과 떠난 시간을 모두 고려하여, 하나의 타임라인을 배열로 생성해서
+      //들어오고 나간 것에 따라 사람 수의 변화를 계속 추적해 나가면서
+      //그 중 가장 최댓값을 구하는 방법
+      function solution(times) {
+        let answer = Number.MIN_SAFE_INTEGER;
+        let T_line = [];
+        for (let x of times) {
+          T_line.push([x[0], "s"]); //도착시간 s
+          T_line.push([x[1], "e"]); //떠난시간 e
+        } //전체 타임라인 생성
+        T_line.sort((a, b) => {
+          if (a[0] === b[0]) return a[1].charCodeAt() - b[1].charCodeAt();
+          //도착시간과 떠난시간이 같으면 떠난시간이 먼저 오도록 정렬
+          //이때 charCodeAt()을 사용하여 아스키코드로 변환한 이유는 'e'와 's'가 문자열이고 떠난시간(e)이 도착시간(s)보다 앞에 와야 하므로
+          //아스키코드로 변환하고 오름차순으로 정렬하면 e가 s보다 먼저 오게 됨
+          else return a[0] - b[0];
+        });
+        let cnt = 0;
+        for (let x of T_line) {
+          if (x[1] === "s") cnt++;
+          //도착시간을 기준으로 사람 숫자를 ++
+          else cnt--; //떠난시간을 기준으로 사람 숫자를 --
+          answer = Math.max(answer, cnt); //가장 많은 사람이 동시에 머물렀을 때를 찾기 위해
+          //이 떄문에 하객들의 떠난 시간과 도착 시간이 같다면 떠난 시간이 먼저 오도록 해야함
+          //두 명의 사람의 도착과 떠남이 동시에 이뤄졌을 때 도착을 먼저 카운팅하면
+          //도착한 사람을 카운팅하는 순간 동시에 머물고 있는 하객의 수가 실제보다 한 명 더 카운팅 되므로
+          //이후에 떠난 사람을 cnt--해줘도
+          //만약 도착한 사람을 카운팅하여 기록한 그 숫자가 동시에 머문 최대 하객의 숫자였다면 오답이 됨
+        }
+        return answer;
+      }
+
+      let arr = [
+        [14, 18],
+        [12, 15],
+        [15, 20],
+        [20, 30],
+        [5, 14],
+      ];
+      console.log(solution(arr));
+      */
+
+      //재풀이
+      function solution(times) {
+        let answer = Number.MIN_SAFE_INTEGER;
+        //모든 시간의 흐름을 담을 수 있는 빈배열 생성
+        let timeline = [];
+        //시간 순서로 timeline 완성
+        for (let i of times) {
+          timeline.push([i[0], "s"]);
+          timeline.push([i[1], "e"]);
+        }
+        //console.log(timeline);
+        //올바른 카운트가 될 수 있도록 도착과 떠남이 동시에 이뤄지는 경우가 있을 때
+        //떠난 경우가 더 먼저 오게끔 정렬
+        timeline.sort((a, b) => {
+          if (a[0] === b[0]) {
+            return a[1].charCodeAt() - b[1].charCodeAt();
+          } else {
+            return a[0] - b[0];
+          }
+        });
+        //console.log(timeline);
+        let cnt = 0; //머물러 있는 사람을 카운트 해줄 변수
+        for (let i of timeline) {
+          if (i[1] === "s") {
+            cnt++;
+          } else {
+            cnt--;
+          }
+          answer = Math.max(answer, cnt);
+        }
+        return answer;
+      }
+
+      let arr = [
+        [14, 18],
+        [12, 15],
+        [15, 20],
+        [20, 30],
+        [5, 14],
+      ];
+      console.log(solution(arr));
+    </script>
+  </body>
+</html>
