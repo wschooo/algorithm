@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      //section7. 정렬,그리디,결정 알고리즘
+      //59. 이분검색
+      /*내풀이
+
+      //이진 탐색(Binary Search)
+      //이미 정렬되어 있는 배열에서 탐색 범위를 절반으로 나눠 찾고자하는 목표값과 중간값을 비교하여 범위를 좁혀가면서
+      //필요한 부분에서만 탐색하도록 제한하여 원하는 값을 찾는 방법
+      //정렬 되어 있는 배열과 시작점, 끝점, 중간지점에 대한 변수가 필요함
+      //매번 탐색할 데이터의 절반을 제외시키므로 선형 검색보다 시간 복잡도에서 효율적임(O(logN))
+      //중간지점과 찾고자 하는 목표값을 비교 했을 때 목표값이 더 크다면 중간지점의 수 보다 더 작은 숫자들은 필요하지 않으므로
+      //시작지점의 값은 중간지점에서 +1칸으로 이동
+      //목표값이 더 작다면 중간지점 보다 더 큰 숫자들은 필요하지 않으므로
+      //끝점의 값은 중간지점에서 -1칸으로 이동
+      //각각 중간지점에서 +1칸, -1칸 이동해주는 이유는 어차피 중간지점도 target값 보다 크거나 , 작은 경우에 해당되므로 
+      //그 중간지점까지 포함하여 필요 없는 부분을 날려주고, 새로운 시작점과 끝점으로 포인터를 이동시키는 것임
+      //이 과정을 반복하여 만약에 목표값과 중간지점이 일치하면 해당 위치에 목표값이 존재하는 것이므로 그 값을 반환
+
+      function solution(arr, target) {
+        let answer;
+        arr.sort((a, b) => a - b);
+        console.log(arr);
+        let start = 0;
+        let end = arr.length - 1;
+        while (start <= end) {
+          let mid = Math.floor((start + end) / 2);
+          if (arr[mid] === target) {
+            answer = mid + 1;
+            return answer;
+          } else if (arr[mid] > target) {
+            end = mid - 1;
+          } else if (arr[mid] < target) {
+            start = mid + 1;
+          }
+          console.log(start, mid, end);
+        }
+        return -1;
+      }
+      let a = [23, 87, 65, 12, 57, 32, 99, 81];
+      let b = 32;
+      console.log(solution(a, b));
+      */
+
+      //해설코드
+      function solution(target, arr) {
+        let answer;
+        arr.sort((a, b) => a - b); //오름차순 정렬
+        let lt = 0,
+          rt = arr.length - 1; //시작점과 끝점을 설정
+        while (lt <= rt) {
+          //서로 어긋나는 순간 탐색 종료(현재 배열에서는 찾는 목표값이 없다는 의미이므로)
+          let mid = parseInt((lt + rt) / 2); //중간지점 설정
+          if (arr[mid] === target) {
+            answer = mid + 1;
+            break; //목표값의 위치를 찾았으니 탐색 종료
+          } else if (arr[mid] > target) rt = mid - 1;
+          else lt = mid + 1;
+        }
+
+        return answer;
+      }
+
+      let arr = [23, 87, 65, 12, 57, 32, 99, 81];
+      console.log(solution(32, arr));
+    </script>
+  </body>
+</html>
