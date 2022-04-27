@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      //section7. 정렬,그리디,결정알고리즘
+      //60.뮤직비디오(결정알고리즘)
+      /*내풀이
+
+      function solution(m, arr){
+          let answer;
+          let lt 
+          return answer;
+      }
+
+      let a = 3;
+      let b = [1,2,3,4,5,6,7,8,9];
+      console.log(solution(a,b));
+      */
+
+      /*해설코드
+      function count(songs, capacity) {
+        let cnt = 1,
+          sum = 0;
+        for (let x of songs) {
+          if (sum + x > capacity) {
+            cnt++;
+            sum = x;
+          } else {
+            sum += x;
+          }
+        }
+        return cnt;
+      }
+
+      function solution(m, songs) {
+        let answer;
+        let lt = Math.max(...songs); //전개연산자 사용
+        let rt = songs.reduce((a, b) => a + b, 0);
+        while (lt <= rt) {
+          let mid = parseInt((lt + rt) / 2);
+          if (count(songs, mid) <= m) {
+            answer = mid;
+            rt = mid - 1;
+          } else {
+            lt = mid + 1;
+          }
+        }
+        return answer;
+      }
+
+      let arr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+      console.log(solution(3, arr));
+      */
+
+      //재풀이
+
+      //3. 주어진 조건에 따른 값을 탐색
+      // ->dvd 용량이 mid(최대치와 최소치의 중간값)라면,
+      //  음악 파일(배열의 요소)을 나눠 담을 수 있는 최소치는?
+      function count(songs, mid) {
+        let cnt = 1, // lt값이 설정되어 있으므로, 나눠 담을 수 있는 최소치는 1부터 시작
+          sum = 0;
+        for (let i of songs) {
+          if (sum + i > mid) {
+            // 용량 초과하는 순간 나눠 담아야 하므로
+            cnt++; // 카운팅을 해주고
+            sum = i; // 해당 요소가 이미 카운팅 되고, 나눠 담긴 상태이므로 sum값을 해당 요소로 변경
+          } else {
+            sum += i;
+          }
+        }
+        return cnt;
+      }
+
+      function solution(m, songs) {
+        let answer;
+        //1. 이분탐색의 기준점 설정
+        let lt = Math.max(...songs); //주어진 배열의 요소를 담을 수 있는 최소치
+        let rt = songs.reduce((a, b) => a + b, 0); //주어진 배열의 요소를 담을 수 있는 최대치
+        //2.탐색 시작
+        while (lt <= rt) {
+          let mid = parseInt((lt + rt) / 2); //최소치와 최대치의 중간 지점
+          if (count(songs, mid) <= m) {
+            // 나눠 담을 수 있는 최소치가 주어진 범위 안에 있다면
+            answer = mid; //그 값을 일단 정답으로 설정하고,
+            rt = mid - 1; // mid값 보다 큰 값들은 해당 최소치를 당연히 만족시킬 수 있으므로 범위에서 배제
+          } else {
+            lt = mid + 1; // 나눠 담을 수 있는 최소치가 주어진 범위를 넘어선다면,
+            //mid값 보다 작은 값들은 배제
+          }
+        }
+        return answer;
+        //결국 주어진 조건의 범위 안에 있더라도 기준값이 주어진 조건을 만족시키는 최적의 값인지 확인하기 위해
+        //현재의 기준값 보다 큰 숫자들을 배제시키면서(주어진 조건을 만족시키므로) 범위를 새롭게 조정하고,
+        //주어진 조건을 넘어서면 현재의 기준값 보다 작은 값들은 주어진 조건을 단연히 만족시킬 수 없으므로
+        //탐색 범위를 또 조정하여 최적값을 찾아 나아가는 것임
+      }
+
+      let arr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+      console.log(solution(3, arr));
+    </script>
+  </body>
+</html>
