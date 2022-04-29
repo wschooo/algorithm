@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      //section7. 정렬, 그리디, 결정 알고리즘
+      //61. 마구간 정하기
+      /*내풀이
+
+      function cnt(arr, mid) {
+        let cnt = 1;
+        for (let i = 1; i < arr.length; i++) {
+          let point = 0;
+          if (arr[i] - arr[point] >= mid) {
+            cnt++;
+            point = i;
+          }
+        }
+        return cnt;
+      }
+
+      function solution(m, arr) {
+        let answer;
+        arr.sort((a, b) => a - b);
+        //console.log(arr);
+        let lt = Math.min(...arr);
+        let rt = Math.max(...arr);
+        while (lt <= rt) {
+          let mid = parseInt((lt + rt) / 2);
+          if (cnt(arr, mid) <= m) {
+            answer = mid;
+            rt = mid - 1;
+          } else {
+            lt = mid + 1;
+          }
+        }
+        return answer;
+      }
+
+      let arr = [1, 2, 12, 19, 9, 67, 34, 56, 43, 14, 73];
+      console.log(solution(3, arr));
+      */
+
+      //해설코드
+      function count(stable, dist) {
+        let cnt = 1,
+          ep = stable[0];
+        for (let i = 1; i < stable.length; i++) {
+          if (stable[i] - ep >= dist) {
+            cnt++;
+            ep = stable[i];
+          }
+        }
+        return cnt;
+      }
+      function solution(c, stable) {
+        let answer;
+        stable.sort((a, b) => a - b);
+        let lt = 1;
+        let rt = stable[stable.length - 1];
+        while (lt <= rt) {
+          let mid = parseInt((lt + rt) / 2);
+          if (count(stable, mid) >= c) {
+            answer = mid;
+            lt = mid + 1;
+          } else rt = mid - 1;
+        }
+        return answer;
+      }
+
+      let arr = [1, 2, 12, 19, 9, 67, 34, 56, 43, 14, 73];
+      console.log(solution(3, arr));
+    </script>
+  </body>
+</html>
