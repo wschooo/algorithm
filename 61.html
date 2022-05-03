@@ -46,7 +46,7 @@
       console.log(solution(3, arr));
       */
 
-      //해설코드
+      /*해설코드
       function count(stable, dist) {
         let cnt = 1,
           ep = stable[0];
@@ -75,6 +75,52 @@
 
       let arr = [1, 2, 12, 19, 9, 67, 34, 56, 43, 14, 73];
       console.log(solution(3, arr));
+      */
+
+      //재풀이
+      //2.
+      function cnt(arr, mid) {
+        let cnt = 1; //말을 가장 첫번쨰에 위치한 마구간에 넣고 시작
+        let point = arr[0]; //마구간 사이의 거리를 측정하기 위한 기준점
+        for (let i = 1; i < arr.length; i++) {
+          if (arr[i] - point >= mid) {
+            cnt++;
+            point = arr[i];
+          }
+        }
+        return cnt;
+      }
+
+      //1.
+      function solution(m, arr) {
+        let answer;
+        arr.sort((a, b) => a - b);
+        let lt = arr[0]; //마구간의 시작 지점
+        let rt = arr[arr.length - 1]; //마구간의 끝 지점
+        //마구간은 수평의 x좌표에 놓여있는 개념
+        while (lt <= rt) {
+          let mid = parseInt((lt + rt) / 2); //마구간 사이의 거리를 중간값으로 하여 최적값을 찾기 위한 이분탐색 시작
+          if (cnt(arr, mid) < m) {
+            //마구간 사이의 거리가 mid일 때, 배치 될 수 있는 말의 수가 주어진 조건(m)보다 적다면
+            rt = mid - 1; //마구간 사이의 거리를 줄인다, 현재 mid 보다 큰 값들은 배제(당연히 mid보다 큰 값들로 더 많은 말을 배치 불가능 하므로)
+          } else {
+            //주어진 조건(m)보다 배치 될 수 있는 말의 수가 많거나 같다면
+            answer = mid;
+            lt = mid + 1; //마구간 사이의 거리를 늘린다, 현재 mid 보다 작은 값들은 배제(당연히 mid보다 작은 값들로 더 적은 말을 배치 불가능 하므로)
+            //cnt가 >= m 인 경우에 해당 mid값을 정답(answer)에 저장하고 탐색을 이어가는 이유는
+            //만약 cnt > m이라면, 예를 들어 3마리의 말을 배치하고 싶은데 현재의 mid값(마구간 사이의 거리)으로
+            //최대 5마리 까지 배치가 가능한 경우에도 3마리만 마구간에 배치가 가능하기 때문임.
+            //다만 마구간과 마구간 사이의 거리가(mid)가 주어진 조건에서 요구하는 것 처럼 최대거리가 아니기 떄문에
+            //현재 마구간 사이의 거리로(mid), 주어진 조건에서 요구하는 배치하려는 말의 수(m)에 꼭 맞게 배치할 수 있을 때(cnt = m)까지
+            //마구간 사이의 거리를 늘려가며(lt = mid + 1) 최적해(mid)를 찾아가는 것임
+          }
+        }
+        return answer;
+      }
+
+      let a = 3;
+      let b = [1, 7, 12, 19, 9, 67, 34, 56, 43, 14, 73];
+      console.log(solution(a, b));
     </script>
   </body>
 </html>
