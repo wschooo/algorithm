@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      //section8. 재귀함수와 완전탐색
+      //63. 이진수 변환(재귀)
+
+      /*내풀이
+      function solution(n) {
+        let answer = "";
+        function DFS(L) {
+          if (Math.floor(L / 2) === 0) {
+            answer += String(L % 2);
+            return;
+          } else {
+            DFS(Math.floor(L / 2));
+            answer += String(L % 2);
+          }
+        }
+        DFS(n);
+        return answer;
+      }
+
+      console.log(solution(11));
+      */
+
+      /*해설코드
+      //let cnt = 0;
+      function solution(n) {
+        let answer = "";
+        function DFS(n) {
+          //console.log(cnt++);
+          if (n === 0) {
+            return;
+          } else {
+            DFS(parseInt(n / 2));
+            answer += String(n % 2);
+          }
+        }
+        DFS(n);
+        return answer;
+      }
+
+      console.log(solution(11));
+      */
+
+      //최종풀이
+      //let cnt = 0;
+      function solution(n) {
+        let answer = "";
+        function DFS(L) {
+          //console.log(cnt++);
+          if (parseInt(L / 2) === 0) {
+            //if(L === 0)일때와 다르게 if(L === 1)일때를 의미
+            answer += String(L % 2); //때문에 나머지를 정답에 바로 더해주는 것과, 재귀의 깊이가 1칸 달라지는 차이점이 발생
+            //console.log(String(L % 2));
+            return;
+          } else {
+            DFS(parseInt(L / 2));
+            answer += String(L % 2);
+          }
+        }
+        DFS(n);
+        return answer;
+      }
+      console.log(solution(11));
+    </script>
+  </body>
+</html>
