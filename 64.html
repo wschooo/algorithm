@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      //section8. 재귀함수와 완전탐색
+      //64. 이진트리 탐색(깊이우선탐색)
+
+      //트리
+      //스택, 큐와 같은 자료구조 -> 선의 형태로 나열 -> 선형 자료구조
+      //트리는 선형이 아닌 계층적인 구조를 가지고 있으며 선의 형태로 나열되지 않는 비선형 자료구조임
+      //트리 구조에서 각각의 원소는 노드라 하며,
+      //노드들이 뻗어나온 가장 최상단에 위치한 노드를 루트노드, 조상노드라고 하며
+      //      A
+      //    /   \
+      //   B     C
+      //  / \
+      // D   E
+      // 와 같은 트리구조가 존재한다고 하면
+      //이때, 노드 A가 루트노드, 조상노드가 되는 것임
+      //A와 B, C
+      //B와 D, E 같이 노드에서 파생된 노드는 부모-자식 관계가 성립하며
+      //C와 같이 자식이 없는 노드는 단말노드라고 칭한다
+      //부모노드에서 뻗어나온 자식노드의 숫자를 차수라고 하며 위와 같은 예시에서 B의 차수는 2가 된다
+      //그리고 각 노드들을 연결하는 선을 간선(edge)라 한다
+
+      //이진트리
+      //위의 트리구조 예시처럼 각 노드의 자식은 꼭 두 개만 있는 것이 아니지만,
+      //자식의 갯수가 계속 늘어날 수록 연산이 복잡해지고
+      //따라서 연산을 단순화하기 위해 모든 노드의 차수를 2이하로 하여
+      //전체 트리의 차수가 2 이하가 되도록 만든 것이 이진트리임
+
+      //이진트리 순회 방법
+      //깊이 우선 순회 방법(Depth First Traversal)
+      //DFS는 또 전위 순회, 중위 순회, 후위 순회로 나눌 수 있음
+
+      //전위 순회: 부모 -> 왼쪽 자식 -> 오른쪽 자식 순서로 순회
+      //중위 순회: 왼쪽 자식 -> 부모 -> 오른쪽 자식 순서로 순회
+      //후위 순회: 왼쪽 자식 -> 오른쪽 자식 -> 부모 순서로 순회
+      //해당 순회 방법들의 기준은 부모 노드를 순회하는 순서임
+
+      /*해설코드
+
+      //1. 전위순회
+      function solution(n) {
+        let answer = "";
+        function DFS(v) {
+          if (n > 7) {
+            return;
+          } else {
+            answer += v + " ";
+            DFS(2 * v);
+            DFS(2 * v + 1);
+          }
+        }
+        DFS(n);
+        return answer;
+      }
+
+      console.log(solution(1));
+
+      //2. 중위순회
+      function solution(n) {
+        let answer = "";
+        function DFS(v) {
+          if (n > 7) {
+            return;
+          } else {
+            DFS(2 * v);
+            answer += v + " ";
+            DFS(2 * v + 1);
+          }
+        }
+        DFS(n);
+        return answer;
+      }
+
+      console.log(solution(1));
+
+      //3. 후위순회
+      function solution(n) {
+        let answer = "";
+        function DFS(v) {
+          if (n > 7) {
+            return;
+          } else {
+            DFS(2 * v);
+            DFS(2 * v + 1);
+            answer += v + " ";
+          }
+        }
+        DFS(n);
+        return answer;
+      }
+
+      console.log(solution(1));
+      */
+
+      //재풀이
+
+      /*1.전위순회
+      function solution(n) {
+        let answer = "";
+        function DFS(v) {
+          if (v > 7) {
+            //해당 문제에서 자식 노드 중 가장 큰 숫자가 7이고, 트리의 높이가 2이므로
+            //종료 조건은 v > 7 이 되었을 떄임
+            return;
+          } else {
+            //부모 -> 왼쪽 자식 -> 오른쪽 자식 순서로 순회를 하는 전위순회이므로
+            answer += v + " "; //부모
+            DFS(2 * v); //왼쪽 자식
+            DFS(2 * v + 1); //오른쪽 자식
+
+            //재귀를 통하여 정해진 순서로 탐색이 진행 되다 재귀의 종료 조건을 만나면(v > 7)
+            //해당 노드에서의 탐색은 종료되고,
+            //스택 영역에 쌓인 스택 프레임이 소멸되는 과정에서
+            //전위순회의 순서에 따라 각 노드가 출력
+
+            //싱세 과정 적어보기
+
+            // v = 1 -> DFS(1) 시작 -> answer에 1 출력
+            // DFS(2 * v) 호출 -> DFS(2) 시작 -> answer에 2 출력
+            // DFS(2 * v) 호출 -> DFS(4) 시작 -> answer에 4 출력
+            // DFS(2 * v) 호출 -> DFS(8) 시작 -> (v > 7) 종료조건을 만나 재귀 종료
+            // DFS(2 * v + 1) 호출 -> DFS(9) 시작 -> (v > 7) 종료조건을 만나 재귀 종료
+            // DFS(4)함수 종료
+
+            // 스택영역 최상단에 위치한 DFS(2)가 이어서 시작
+            // DFS(2 * v + 1) 호출 -> DFS(5) 시작 -> answer에 5 출력
+            // DFS(2 * v) 호출 -> 재귀 종료(DFS(10)), DFS(2 * v + 1) 호출 -> 재귀 종료(DFS(11))
+            // DFS(5) 함수 종료
+            // DFS(2) 함수 종료
+
+            // 스택영역 최상단에 위치한 DFS(1)이 이어서 시작
+            // DFS(2 * v + 1) 호출 -> DFS(3) 시작 -> answer에 3 출력
+            // DFS(2 * v) 호출 -> DFS(6) 시작 -> answer에 6 출력
+            // DFS(2 * v) 호출 -> 재귀 종료(DFS(12)), DFS(2 * v + 1) 호출 -> 재귀 종료(DFS(13))
+            // DFS(6) 함수 종료
+
+            // 스택영역 최상단에 위치한 DFS(3)이 이어서 시작
+            // DFS(2 * v + 1) 호출 -> DFS(7) 시작 -> answer에 7 출력
+            // DFS(2 * v) 호출 -> 재귀 종료(DFS(14)), DFS(2 * v + 1) 호출 -> 재귀 종료(DFS(15))
+            // DFS(7) 함수 종료
+            // DFS(3) 함수 종료
+
+            // DFS(1) 함수 종료
+          }
+        }
+        DFS(n);
+        return answer;
+      }
+
+      console.log(solution(1));
+      //매개변수가 1이 들어가는 이유는 해당 문제의 이진트리 구조가
+      //루트노드 1, 그 이하의 자식은 2n, 2n+1이 되기 떄문임
+      */
+
+      /*2. 중위순회
+      function solution(n) {
+        let answer = "";
+        function DFS(v) {
+          if (v > 7) {
+            return;
+          } else {
+            DFS(2 * v); // 왼쪽 자식
+            answer += v + " "; // 부모
+            DFS(2 * v + 1); //오른쪽 자식
+
+            //DFS(1) -> DFS(2) -> DFS(4) -> DFS(8) -> answer 4 -> DFS(9) -> DFS(4) 종료
+            //answer 2 -> DFS(5) -> DFS(10) -> answer 5 -> DFS(11) -> DFS(2) 종료
+            //answer 1 -> DFS(3) -> DFS(6) -> DFS(12) -> answer 6 -> DFS(13) -> DFS(6) 종료
+            //answer 3 -> DFS(7) -> DFS(14) -> answer 7 -> DFS(15) -> DFS(7) 종료 -> DFS(3) 종료 -> DFS(1) 종료
+          }
+        }
+        DFS(n);
+        return answer;
+      }
+      console.log(solution(1));
+      */
+
+      //3. 후위순회
+      function solution(n) {
+        let answer = "";
+        function DFS(v) {
+          if (v > 7) {
+            return;
+          } else {
+            DFS(2 * v); // 왼쪽 자식
+            DFS(2 * v + 1); //오른쪽 자식
+            answer += v + " "; // 부모
+
+            //DFS(1) -> DFS(2) -> DFS(4) -> DFS(8) -> DFS(9) -> answer 4 -> DFS(4) 종료
+            //DFS(5) -> DFS(10) -> DFS(11) -> answer 5 -> DFS(5) 종료 -> answer 2 -> DFS(2) 종료
+            //DFS(3) -> DFS(6) -> DFS(12) -> DFS(13) -> answer 6 -> DFS(6) 종료
+            //DFS(7) -> DFS(14) -> DFS(15) -> answer 7 -> DFS(7) 종료
+            //answer 3 -> DFS(3) 종료 -> answer 1 -> DFS(1) 종료
+          }
+        }
+        DFS(n);
+        return answer;
+      }
+      console.log(solution(1));
+
+      //해당 순회들은 결국, 각 노드마다 똑같은 구조의 함수를 재귀를 통해 반복하는 것이므로
+      //자식이 없는 단말 노드도 먼저 재귀를 통해 반복은 이뤄지게 되지만
+      //자식이 있는지 없는지 확인하는 조건(v > 7)에 걸려 재귀가 종료되는 것이고,
+      //이때도 각 순회의 기준인 부모노드를 순회하는 순서에 따라 answer 변수에 반환하는 구조를 따른다
+    </script>
+  </body>
+</html>
