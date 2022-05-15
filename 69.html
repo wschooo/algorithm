@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      //section8. 재귀함수와 완전탐색
+      //69. 중복순열 구하기
+
+      /*내풀이
+      function solution(m, n) {
+        let ch = [];
+        let answer = "";
+        function DFS(a) {
+          let count = 0;
+
+          if (a > m) {
+            let count = 0;
+            for (let i = 1; i < ch.length; i++) {
+              if (ch[i] === 1) {
+                count++;
+                answer += i + " ";
+                if (count === n) {
+                  break;
+                }
+              }
+            }
+          } else {
+            ch[a] = 1;
+            DFS(a + 1);
+            ch[a] = 0;
+            DFS(a + 1);
+            ch[a] = 1;
+            DFS(a + 1);
+            ch[a] = 0;
+            DFS(a + 1);
+          }
+        }
+        DFS(1);
+        return answer;
+      }
+
+      console.log(solution(3, 2));
+      //문제 접근 자체가 잘못 된 것 같다(이진트리로 뻗어나가면서, 중복된 노드 포함 노드를 2개까지만 담아내는 방법은?, 최종 경우의 수는 어떻게?)
+      */
+
+      /*재풀이(재귀X , 이중for문)
+      function solution(n) {
+        let answer = [];
+        for (let i = 1; i <= n; i++) {
+          for (let j = 1; j <= n; j++) {
+            answer.push([i, j]);
+          }
+        }
+        answer.push(answer.length);
+        return answer;
+      }
+
+      console.log(solution(3));
+      */
+
+      /*해설코드
+      function solution(n, m) {
+        let answer = [];
+        let tmp = Array.from({ length: m }, () => 0);
+        function DFS(L) {
+          if (L === m) {
+            answer.push(tmp.slice());
+          } else {
+            for (let i = 1; i <= n; i++) {
+              tmp[L] = i;
+              DFS(L + 1);
+            }
+          }
+        }
+        DFS(0);
+        return answer;
+      }
+
+      console.log(solution(3, 2));
+      */
+
+      //재풀이
+      function solution(n, m) {
+        let answer = [];
+        let tmp = Array.from({ length: m }, () => 0); //정답을 넣을 임시 변수
+        function DFS(L) {
+          if (L === m) {
+            answer.push(tmp.slice()); //원본 배열(현재 재귀를 마치고 tmp에 저장된 값)에 대한 얕은 복사본을 반환
+            //원본 배열은 바뀌지 않음
+            if (answer.length === n ** m) {
+              answer.push(answer.length);
+            }
+          } else {
+            for (let i = 1; i <= n; i++) {
+              //1부터 n까지 반복하면서
+              tmp[L] = i; //tmp[L]에 i를 저장. i는 정답이 될 수 있는 원소이며 L은 이와 상관 없이 재귀의 깊이(임시배열의 인덱스번호)가 됨
+              DFS(L + 1); //이후 재귀
+              //깊이가 0에서(임시변수 tmp의 0번 인덱스에서) 반복을 통한 1, 2, 3 저장
+              //깊이가 1에서(임시변수 tmp의 1번 인덱스에서) 반복을 통한 1, 2, 3 저장
+              //즉 1 -> 1, 2, 3( 1 1, 1 2, 1 3) , 2 -> 1, 2, 3( 2 1, 2 2, 2 3), 3 -> (3 1, 3 2, 3 3)
+            }
+          }
+          //DFS(L)(재귀함수)의 역할은 주어진 조건에 맞는 노드의 조합(중복순열)을 저장하는 것이 아닌
+          //m개까지 저장 즉, 정답을 저장하는 임시변수 배열 tmp의 인덱스 번호이자
+          //재귀를 몇 번 할것인지에 대한 깊이를 나타냄
+
+          //이중반복으로 해당 문제를 풀 수도 있지만 재귀를 통한 깊이우선탐색과의 차이점은
+          //만약 m이 늘어난다면 예를 들어 1~3까지의 숫자 중 중복을 4번(m) 허락하여 중복순열을 구한다면,
+          //반복문의 갯수가 m번만큼 늘어나게 되므로 일일이 수정해야 됨
+
+          //반면에 깊이우선탐색으로 해당 문제를 접근한다면, 중복을 몇 번을 허락하던지 간에 매개변수(m)만 바꿔주면 됨
+        }
+        DFS(0);
+        return answer;
+      }
+
+      console.log(solution(3, 2));
+    </script>
+  </body>
+</html>
