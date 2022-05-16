@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      //section8. 재귀함수와 완전탐색
+      //70. 동전교환
+
+      /*내풀이
+      function solution(arr, m) {
+        let answer;
+        arr.sort((a, b) => b - a);
+        function DFS(L, sum) {
+          if (sum === m) {
+            answer = L;
+            return;
+          } else {
+            for (let i = 0; i < arr.length; i++) {
+              DFS(L + 1, sum + arr[i]);
+            }
+          }
+        }
+        DFS(0, 0);
+        return answer;
+      }
+      let arr = [1, 2, 5];
+      let a = 15;
+      console.log(solution(arr, a));
+      //스택 오버플로우
+      //재귀의 종료 조건을 어떻게 설정할 것인가?
+      //L값을 재귀의 깊이가 아닌 무엇으로?
+      */
+
+      /*해설코드
+      function solution(m, arr) {
+        let answer = Number.MAX_SAFE_INTEGER;
+        let n = arr.length;
+        function DFS(L, sum) {
+          if (sum > m) return;
+          if (L >= answer) return;
+          if (sum === m) {
+            console.log(L, sum);
+            answer = Math.min(answer, L);
+          } else {
+            for (let i = 0; i < n; i++) {
+              DFS(L + 1, sum + arr[i]);
+            }
+          }
+        }
+        DFS(0, 0);
+        return answer;
+      }
+
+      let arr = [1, 2, 5];
+      console.log(solution(15, arr));
+      */
+
+      //재풀이
+      function solution(m, arr) {
+        // arr.sort((a, b) => b - a); //액수가 큰 동전 부터 탐색한다면 횟수가 줄어들기 때문에 내림차순 정렬
+        n = arr.length;
+        let answer = Number.MAX_SAFE_INTEGER;
+        function DFS(L, sum) {
+          if (L >= answer) {
+            return;
+            //재귀의 깊이(동전의 갯수)가 현재의 정답과 같거나 같아진다면
+            //이 역시 더이상 재귀를 반복하며 주어진 조건에 맞는 sum값을 탐색할 필요가 없으므로 종료
+          }
+          if (sum > m) {
+            return;
+            //처음 풀이에서 에러가 발생한 이유는 sum === m 값을 만족하는 경우만 찾았기 때문임
+            //sum === m 을 만족하지 않는 경우 즉, sum === m값을 만족시키지 못하고
+            //sum > m이 되는 경우(예를 들어 14 -> 16)는 계속해서 재귀를 반복하기 떄문임
+            //해당하는 경우들은 주어진 조건을 만족시키지 못하고, 더이상 재귀를 반복 할 이유가 없으므로 탐색 종료
+          }
+          if (sum === m) {
+            // console.log(L, sum);
+            answer = Math.min(answer, L);
+            //여기서 L은 재귀의 깊이이며, 사용된 동전의 갯수를 나타 냄
+            //m을 만족하는 가장 적은 동전의 갯수를 출력해야 하므로
+            //초기 answer값을 설정해두고, sum === m 값이 발견 되었을 때
+            //더 얕은 깊이의 L(더 적은 동전의 갯수)을 정답으로
+          } else {
+            for (let i = 0; i < n; i++) {
+              DFS(L + 1, sum + arr[i]);
+            }
+          }
+        }
+        DFS(0, 0);
+        return answer;
+      }
+
+      let arr = [1, 2, 5];
+      console.log(solution(15, arr));
+    </script>
+  </body>
+</html>
