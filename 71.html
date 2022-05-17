@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      //section8. 재귀함수와 완전탐색
+      //71. 순열 구하기
+
+      /*내풀이
+       function solution(arr, n) {
+         let answer = [];
+         let tmp = Array.from({ length: n }, () => 0);
+         console.log(tmp.includes(1));
+         function DFS(L) {
+           if (L === n) {
+             answer.push(tmp.slice());
+           } else {
+             for (let i = 0; i < arr.length; i++) {
+               if (tmp.includes(arr[i]) === false) {
+                 tmp[L] = arr[i];
+                 // console.log(tmp);
+                 DFS(L + 1);
+               } else {
+                 continue;
+               }
+             }
+           }
+         }
+         DFS(0);
+         return answer;
+       }
+
+       let n = 2;
+       let arr = [3, 6, 9];
+       console.log(solution(arr, n));
+      //문제점: 정답을 임시로 저장하는 tmp배열을 기준으로 tmp.includes(arr[i]) === false) 라는 조건식을 통해
+      //배열안에 중복요소가 발견 되지 않을 때만 재귀를 반복하는 조건을 생각했지만
+      //조건을 판단하는 기준 자체가 tmp배열이므로 [3,0], [3, 6], [3, 9], [6, 9], [6, 3], [6, 9]를 거쳐 tmp 배열이 변하다가
+      //tmp[0] 자리에 9가 와야하는 순간에 tmp.includes(arr[i]) === false) 조건식에 위배되기 때문에
+      //더 이상 재귀가 뻗어가지 못함 즉, 조건식 자체가 잘못 됨
+      //어떻게 중복된 요소를 걸러주는 조건식을 넣을 것인가?
+       */
+
+      /*해설코드
+       function solution(m, arr) {
+         let answer = [];
+         n = arr.length;
+         let ch = Array.from({ length: n }, () => 0);
+         let tmp = Array.from({ length: m }, () => 0);
+         function DFS(L) {
+           if (L === m) {
+             answer.push(tmp.slice());
+           } else {
+             for (let i = 0; i < n; i++) {
+               if (ch[i] === 0) {
+                 ch[i] = 1;
+                 tmp[L] = arr[i];
+                 DFS(L + 1);
+                 ch[i] = 0;
+               }
+             }
+           }
+         }
+         DFS(0);
+         return answer;
+       }
+
+       let arr = [3, 6, 9, 5];
+       console.log(solution(2, arr));
+       */
+
+      //재풀이
+      function solution(arr, n) {
+        let answer = [];
+        let ch = Array.from({ length: arr.length }, () => 0); //중복을 가려내기 위한 체크용 배열
+        let tmp = Array.from({ length: n }, () => 0); //조건에 맞는 정답(순열)을 저장하기 위한 임시 배열
+        function DFS(L) {
+          //재귀의 깊이는 인덱스 번호
+          if (L === n) {
+            answer.push(tmp.slice());
+          } else {
+            for (let i = 0; i < arr.length; i++) {
+              if (ch[i] === 0) {
+                //체크용 배열이 0일 때(아직 해당 요소가 사용되지 않았다면)
+                ch[i] = 1; //사용 했음으로 바꾸고(체크배열의 i번 요소를 1로 바꿈)
+                tmp[L] = arr[i]; //임시 배열에 넣은 후
+                DFS(L + 1); //재귀
+                ch[i] = 0; //종료조건을 만나 재귀가 종료되고 이전 깊이로 돌아온 후, 사용 안함(0)으로 변경(원래 상태로)
+              }
+            }
+          }
+        }
+        DFS(0);
+        answer.push(answer.length);
+        return answer;
+      }
+
+      let n = 2;
+      let arr = [3, 6, 9];
+      console.log(solution(arr, n));
+    </script>
+  </body>
+</html>
