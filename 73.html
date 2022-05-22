@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      //section8. 재귀함수와 완전탐색
+      //73. 조합의 경우수
+
+      /*내풀이
+      function solution(n, r) {
+        let answer;
+        function DFS(n, r) {
+            if(n === 1){
+                return 1;
+            }
+            else {
+          DFS(n - 1, r - 1) + DFS(n -1, r)
+            }
+        }
+
+        answer = DFS(n, r);
+        return answer;
+      }
+
+      console.log(solution(5, 3));
+      //트리를 뻗어나갈 때 , 계산식을 어떻게 처리하여 구현할 것인가?
+      */
+
+      /*해설코드
+      function solution(n, r) {
+        let answer;
+        function DFS(n, r) {
+          if (n === r || r === 0) return 1;
+          else return DFS(n - 1, r - 1) + DFS(n - 1, r);
+          //계산식을 따로 구현해야 하는 것이 아니라,
+          //종료조건을 만난 트리의 끝지점에서 그 값(return 1)을 반환하게 되면
+          //이는 명시적인 값이 아닌 실제 조합의 값(경우의 수)이 되므로
+          //종료조건을 만나 재귀함수가 종료 되고 스택영역에 쌓인 스택프레임이 처리되는 과정에서,
+          //실제 조합의 경우의 수가 반환되는 것임
+        }
+
+        answer = DFS(n, r);
+        return answer;
+      }
+      
+      console.log(solution(5, 3));
+      */
+
+      /*구하는 조합의 경우의 수가 대폭 커지는 경우는?
+      // -> 트리도 그만큼 많이 뻗게 되기 떄문에 처리 속도가 굉장히 느려짐
+      function solution(n, r) {
+        let answer;
+        function DFS(n, r) {
+          if (n === r || r === 0) return 1;
+          else return DFS(n - 1, r - 1) + DFS(n - 1, r);
+        }
+
+        answer = DFS(n, r);
+        return answer;
+      }
+
+      console.log(solution(33, 19));
+      */
+
+      //때문에 효율성을 늘리는 방법이 필요함 -> 메모이제이션
+      //트리가 뻗어나가면서 발생하는 중복값을 제거하는 방법
+      /*
+      function solution(n, r) {
+        let answer;
+        let dy = Array.from({ length: 33 }, () => Array(35).fill(0));
+        console.log(dy);
+        function DFS(n, r) {
+          if (dy[n][r] > 0) return dy[n][r];
+          if (n === r || r === 0) return 1;
+          else return (dy[n][r] = DFS(n - 1, r - 1) + DFS(n - 1, r));
+        }
+
+        answer = DFS(n, r);
+        return answer;
+      }
+
+      console.log(solution(33, 19));
+      */
+
+      //재풀이
+      function solution(n, r) {
+        let answer;
+        let memo = Array.from(Array(n + 1), () => Array(r + 1).fill(0));
+        //계산 시간을 줄이기 위해, 재귀종료조건을 만나 반환 된 값들을 저장해 둘 메모용 배열 생성
+
+        // console.log(memo);
+
+        function DFS(n, r) {
+          if (memo[n][r] > 0) {
+            //이미 이전에 계산이 되어 그 값이 메모용 배열에 저장 돼 있다면(중복으로 발생하는 계산 과정 처리)
+            return memo[n][r];
+          }
+          if (n === r || r === 0) {
+            return 1;
+          }
+          if (r === 1) {
+            return n;
+          } else {
+            return (memo[n][r] = DFS(n - 1, r - 1) + DFS(n - 1, r));
+            //결과를 메모용 배열에 저장하면서 재귀
+          }
+        }
+        answer = DFS(n, r);
+        return answer;
+      }
+
+      console.log(solution(20, 10));
+    </script>
+  </body>
+</html>
